@@ -1,4 +1,4 @@
-using System.Net;
-public class BaseController {
-    public HttpListenerContext? Context;
+public class BaseController 
+{
+    
 }

@@ -5,9 +5,8 @@ public class Recipe
     public string? Description { get; set; }
     public string? Category { get; set; }
     public double? Price { get; set; }
-    public Recipe(int id, string title, string description, string category, double price)
+    public Recipe(string title, string description, string category, double price)
     {
-        this.Id = id;
         this.Title = title;
         this.Description = description;
         this.Category = category;
