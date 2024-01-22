@@ -7,7 +7,7 @@ public class CookingController : BaseController
 {
     private const string ConnectionString = "Server=localhost;Database=CookingAppDB;User Id=sa;Password=admin;";
 
-    [HttpGet("GetAll")]
+    [HttpGet("GetAll")] 
     public async Task GetRecipesAsync(HttpListenerContext context)
     {
         using var writer = new StreamWriter(context.Response.OutputStream);
