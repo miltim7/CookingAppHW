@@ -20,16 +20,6 @@ public class CookingRepository
         return recipes;
     }
 
-    public async Task<Recipe> GetById(int id)
-    {
-        using var connection = new SqlConnection(connectionString);
-
-        string query = "select * from Recipe where Id = @Id";
-        var recipe = await connection.QueryFirstOrDefaultAsync<Recipe>(query, new { Id = id });
-
-        return recipe;
-    }
-
     public async Task<bool> Create(RecipeDto recipeDto)
     {
         using var connection = new SqlConnection(connectionString);

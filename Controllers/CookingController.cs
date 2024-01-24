@@ -28,8 +28,15 @@ public class CookingController : Controller
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] RecipeDto recipeDto)
     {
+        if (string.IsNullOrWhiteSpace(recipeDto.Title) ||
+            string.IsNullOrWhiteSpace(recipeDto.Description) ||
+            string.IsNullOrWhiteSpace(recipeDto.Category) ||
+            recipeDto.Price < 0) {
+            return BadRequest("Fields Can not be empty");
+        }
+
         if (!await repository.Create(recipeDto))
-            return BadRequest();
+            return BadRequest($"Bad Request");
 
         HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
 
