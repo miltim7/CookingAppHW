@@ -1,14 +1,20 @@
-using System.Net;
+﻿using System.Data.SqlClient;
+using Dapper;
+using Microsoft.AspNetCore.Mvc;
 
-public class HomeController : BaseController {
-    [HttpGet]
-    public async Task HomePageAsync(HttpListenerContext Context) {
-        using var writer = new StreamWriter(Context.Response.OutputStream);
+namespace CookingAppASPNET.Controllers;
 
-        var pageHtml = await File.ReadAllTextAsync("Views/Home.html");
-        await writer.WriteAsync(pageHtml);
+public class HomeController : Controller
+{
+    private readonly ILogger<HomeController> _logger;
 
-        Context.Response.StatusCode = (int)HttpStatusCode.OK;
-        Context.Response.ContentType = "text.html";
+    public HomeController(ILogger<HomeController> logger)
+    {
+        _logger = logger;
+    }
+
+    public IActionResult Index()
+    {
+        return View();
     }
 }

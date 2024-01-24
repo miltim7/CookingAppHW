@@ -1,0 +1,21 @@
+@model IEnumerable<Recipe>
+
+@{
+    ViewData["Title"] = "Recipes";
+}
+
+<ul>
+    @foreach (var recipe in Model)
+    {
+        <div class="title">
+            <li>@recipe.Title</li>
+        </div>
+        <div class="price">
+            <li>@recipe.Price$</li>
+        </div>
+        <div class="det-edit">
+            <a asp-action="Details" asp-controller="Cooking" asp-route-id="@recipe.Id">Details</a>
+            <a asp-action="Edit" asp-controller="Cooking" asp-route-id="@recipe.Id">Edit</a>
+        </div>
+    }
+</ul>

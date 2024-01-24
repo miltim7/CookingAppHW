@@ -1,0 +1,21 @@
+@model Recipe;
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<a href="/Cooking/Recipes/GetAll" class="go-back">&#8249;</a>
+
+<form onsubmit="return validateForm();" asp-asp-controller="Cooking" asp-action="Edit" method="post">
+    <input asp-for="@Model.Id" hidden>
+    <input onkeydown="handleEnterKeyPress(event, 'description')" id="title" asp-for="@Model.Title" type="text"
+        placeholder="Title" />
+    <textarea onkeydown="handleEnterKeyPress(event, 'category')" id="description" asp-for="@Model.Description"
+        placeholder="Description" cols="30" rows="10"></textarea>
+    <input onkeydown="handleEnterKeyPress(event, 'price')" id="category" asp-for="@Model.Category" type="text"
+        placeholder="Category" />
+    <input onkeydown="handleEnterKeyPress(event, 'submit')" id="price" asp-for="@Model.Price" type="number"
+        placeholder="Price" value="@Model.Price">
+
+    <input id="submit" type="submit" value="Save Changes" />
+</form>
