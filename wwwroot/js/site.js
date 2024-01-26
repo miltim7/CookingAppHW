@@ -37,6 +37,11 @@ function validateForm() {
         return false;
     }
 
+    if (priceValue < 0) {
+        alert('Price can not be negative nubmer!');
+        return false;
+    }
+
     return true;
 }
 

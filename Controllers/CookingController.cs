@@ -30,9 +30,12 @@ public class CookingController : Controller
     {
         if (string.IsNullOrWhiteSpace(recipeDto.Title) ||
             string.IsNullOrWhiteSpace(recipeDto.Description) ||
-            string.IsNullOrWhiteSpace(recipeDto.Category) ||
-            recipeDto.Price < 0) {
+            string.IsNullOrWhiteSpace(recipeDto.Category)) {
             return BadRequest("Fields Can not be empty");
+        }
+
+        if (recipeDto.Price < 0) {
+            return BadRequest("Price must be positive number or 0");
         }
 
         if (!await repository.Create(recipeDto))
