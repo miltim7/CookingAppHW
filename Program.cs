@@ -1,6 +1,17 @@
+using System.Data.SqlClient;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+string? connectionString = builder.Configuration.GetConnectionString("CookingDB");
+
+ArgumentNullException.ThrowIfNull(connectionString);
+
+builder.Services.AddScoped<ICookingRepository>(p =>
+{
+    return new CookingRepository(new SqlConnection(connectionString));
+});
 
 var app = builder.Build();
 

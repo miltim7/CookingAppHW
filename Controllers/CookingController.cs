@@ -5,16 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 
 public class CookingController : Controller
 {
-    private CookingRepository repository;
-    public CookingController(IConfiguration configuration)
+    private ICookingRepository repository;
+    public CookingController(ICookingRepository repository)
     {
-        this.repository = new CookingRepository(configuration);
+        this.repository = repository;
     }
 
     [Route("[controller]/Recipes/GetAll")]
     public async Task<IActionResult> Recipes()
     {
-        var recipes = await repository.GetAll();
+        var recipes = await repository.GetAllAsync();
         return View(recipes);
     }
 
@@ -38,7 +38,7 @@ public class CookingController : Controller
             return BadRequest("Price must be positive number or 0");
         }
 
-        if (!await repository.Create(recipeDto))
+        if (await repository.CreateAsync(recipeDto) == 0)
             return BadRequest($"Bad Request");
 
         HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
@@ -50,7 +50,7 @@ public class CookingController : Controller
     [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
-        var recipe = await repository.GetById(id);
+        var recipe = await repository.GetByIdAsync(id);
 
         if (recipe is null)
             return BadRequest($"There is no recipe to detail with id: {id}");

@@ -2,43 +2,30 @@
 using System.Data.SqlClient;
 using Dapper;
 
-public class CookingRepository
+public class CookingRepository : ICookingRepository
 {
-    private readonly string connectionString;
-    public CookingRepository(IConfiguration configuration)
+    private readonly SqlConnection connection;
+    public CookingRepository(SqlConnection connection)
     {
-        connectionString = configuration.GetConnectionString("CookingDB");
+        this.connection = connection;
     }
 
-    public async Task<IEnumerable<Recipe>> GetAll()
+    public async Task<IEnumerable<Recipe>> GetAllAsync()
     {
-        using var connection = new SqlConnection(connectionString);
-
-        string query = "select * from Recipe";
-        IEnumerable<Recipe> recipes = await connection.QueryAsync<Recipe>(query);
-
-        return recipes;
+        return await connection.QueryAsync<Recipe>("select * from Recipe");
     }
 
-    public async Task<bool> Create(RecipeDto recipeDto)
+    public async Task<int> CreateAsync(RecipeDto recipeDto)
     {
-        using var connection = new SqlConnection(connectionString);
-
         string query = @"insert into Recipe (Title, [Description], Category, Price)
                          values(@Title, @Description, @Category, @Price)";
 
-        if (await connection.ExecuteAsync(query, recipeDto) > 0)
-            return true;
-
-        return false;
+        return await connection.ExecuteAsync(query, recipeDto);
     }
 
-    public async Task<Recipe> GetById(int id) {
-        using var connection = new SqlConnection(connectionString);
-
+    public async Task<Recipe> GetByIdAsync(int id) {
         string query = "select * from Recipe where Id = @Id";
-        var recipe = await connection.QueryFirstOrDefaultAsync<Recipe>(query, new { Id = id });
 
-        return recipe;
+        return await connection.QueryFirstOrDefaultAsync<Recipe>(query, new { Id = id });
     }
 }
