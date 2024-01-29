@@ -1,0 +1,15 @@
+@model Recipe
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<a href="/Cooking/Recipes/GetAll" class="go-back">&#8249;</a>
+
+<ul>
+    <li>Id: @Model.Id</li>
+    <li>Title: @Model.Title</li>
+    <li>Description: @Model.Description</li>
+    <li>Category: @Model.Category</li>
+    <li>Price: @Model.Price</li>
+</ul>

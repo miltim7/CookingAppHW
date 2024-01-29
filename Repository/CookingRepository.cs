@@ -32,4 +32,13 @@ public class CookingRepository
 
         return false;
     }
+
+    public async Task<Recipe> GetById(int id) {
+        using var connection = new SqlConnection(connectionString);
+
+        string query = "select * from Recipe where Id = @Id";
+        var recipe = await connection.QueryFirstOrDefaultAsync<Recipe>(query, new { Id = id });
+
+        return recipe;
+    }
 }

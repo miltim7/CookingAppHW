@@ -45,4 +45,16 @@ public class CookingController : Controller
 
         return RedirectToAction("Recipes", "Cooking");
     }
+
+    [Route("[controller]/Recipes/Details")]
+    [HttpGet]
+    public async Task<IActionResult> Details(int id)
+    {
+        var recipe = await repository.GetById(id);
+
+        if (recipe is null)
+            return BadRequest($"There is no recipe to detail with id: {id}");
+
+        return View(recipe);
+    }
 }
