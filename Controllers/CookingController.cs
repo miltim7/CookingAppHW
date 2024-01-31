@@ -1,151 +1,60 @@
 using System.Data.SqlClient;
 using System.Net;
-using System.Text.Json;
 using Dapper;
+using Microsoft.AspNetCore.Mvc;
 
-public class CookingController : BaseController
+public class CookingController : Controller
 {
-    private const string ConnectionString = "Server=localhost;Database=CookingAppDB;User Id=sa;Password=admin;";
-
-    [HttpGet("GetAll")] 
-    public async Task GetRecipesAsync(HttpListenerContext context)
+    private ICookingRepository repository;
+    public CookingController(ICookingRepository repository)
     {
-        using var writer = new StreamWriter(context.Response.OutputStream);
-
-        using var connection = new SqlConnection(ConnectionString);
-        var recipes = await connection.QueryAsync<Recipe>("select * from Recipe");
-
-        var recipesHtml = recipes.GetHtml();
-        await writer.WriteLineAsync(recipesHtml);
-        context.Response.ContentType = "text/html";
-
-        context.Response.StatusCode = (int)HttpStatusCode.OK;
+        this.repository = repository;
     }
 
-    [HttpGet("GetById")]
-    public async Task GetRecipeByIdAsync(HttpListenerContext context)
+    [Route("[controller]/Recipes/GetAll")]
+    public async Task<IActionResult> Recipes()
     {
-        var recipeIdToGetObj = context.Request.QueryString["id"];
+        var recipes = await repository.GetAllAsync();
+        return View(recipes);
+    }
 
-        if (recipeIdToGetObj == null || int.TryParse(recipeIdToGetObj, out int recipeIdToGet) == false)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return;
+    [Route("[controller]/Recipes/Create")]
+    [HttpGet]
+    public IActionResult Create() {
+        return View();
+    }
+
+    [Route("[controller]/Recipes/Create")]
+    [HttpPost]
+    public async Task<IActionResult> Create([FromForm] RecipeDto recipeDto)
+    {
+        if (string.IsNullOrWhiteSpace(recipeDto.Title) ||
+            string.IsNullOrWhiteSpace(recipeDto.Description) ||
+            string.IsNullOrWhiteSpace(recipeDto.Category)) {
+            return BadRequest("Fields Can not be empty");
         }
 
-        using var connection = new SqlConnection(ConnectionString);
-        var recipe = await connection.QueryFirstOrDefaultAsync<Recipe>(
-            sql: "select top 1 * from Recipe where Id = @Id",
-            param: new { Id = recipeIdToGet });
+        if (recipeDto.Price < 0) {
+            return BadRequest("Price must be positive number or 0");
+        }
+
+        if (await repository.CreateAsync(recipeDto) == 0)
+            return BadRequest($"Bad Request");
+
+        HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
+
+        return RedirectToAction("Recipes", "Cooking");
+    }
+
+    [Route("[controller]/Recipes/Details")]
+    [HttpGet]
+    public async Task<IActionResult> Details(int id)
+    {
+        var recipe = await repository.GetByIdAsync(id);
 
         if (recipe is null)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            return;
-        }
+            return BadRequest($"There is no recipe to detail with id: {id}");
 
-        using var writer = new StreamWriter(context.Response.OutputStream);
-        await writer.WriteLineAsync(JsonSerializer.Serialize(recipe));
-
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.OK;
-    }
-
-    [HttpPost("Create")]
-    public async Task PostRecipeAsync(HttpListenerContext context)
-    {
-        using var reader = new StreamReader(context.Request.InputStream);
-
-        string json = await reader.ReadToEndAsync();
-
-        var newRecipe = JsonSerializer.Deserialize<Recipe>(json);
-
-        if (newRecipe == null || newRecipe.Price == null || string.IsNullOrWhiteSpace(newRecipe.Title) || string.IsNullOrWhiteSpace(newRecipe.Description) || string.IsNullOrWhiteSpace(newRecipe.Category))
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return;
-        }
-
-        using var connection = new SqlConnection(ConnectionString);
-        var recipes = await connection.ExecuteAsync(
-            @"insert into Recipe (Title, [Description], Category, Price)
-            values(@Title, @Description, @Category, @Price)",
-            param: newRecipe);
-
-        context.Response.StatusCode = (int)HttpStatusCode.Created;
-    }
-
-    [HttpDelete]
-    public async Task DeleteRecipeAsync(HttpListenerContext context)
-    {
-        var recipeIdToDeleteObj = context.Request.QueryString["id"];
-
-        if (recipeIdToDeleteObj == null || int.TryParse(recipeIdToDeleteObj, out int recipeIdToDelete) == false)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return;
-        }
-
-        using var connection = new SqlConnection(ConnectionString);
-        var deletedRowsCount = await connection.ExecuteAsync(
-            @"delete Recipe
-            where Id = @Id",
-            param: new
-            {
-                Id = recipeIdToDelete,
-            });
-
-        if (deletedRowsCount == 0)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            return;
-        }
-
-        context.Response.StatusCode = (int)HttpStatusCode.OK;
-    }
-
-    [HttpPut]
-    public async Task PutRecipeAsync(HttpListenerContext context)
-    {
-        var recipeIdToUpdateObj = context.Request.QueryString["id"];
-
-        if (recipeIdToUpdateObj == null || int.TryParse(recipeIdToUpdateObj, out int recipeIdToUpdate) == false)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return;
-        }
-
-        using var reader = new StreamReader(context.Request.InputStream);
-        var json = await reader.ReadToEndAsync();
-
-        var recipeToUpdate = JsonSerializer.Deserialize<Recipe>(json);
-
-        if (recipeToUpdate == null || recipeToUpdate.Price == null || string.IsNullOrWhiteSpace(recipeToUpdate.Title) || string.IsNullOrWhiteSpace(recipeToUpdate.Description) || string.IsNullOrWhiteSpace(recipeToUpdate.Category))
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return;
-        }
-
-        using var connection = new SqlConnection(ConnectionString);
-        var affectedRowsCount = await connection.ExecuteAsync(
-            @"update Recipe
-            set Title = @Title, Price = @Price, [Description] = @Description, Category = @Category
-            where Id = @Id",
-            param: new
-            {
-                recipeToUpdate.Title,
-                recipeToUpdate.Price,
-                recipeToUpdate.Description,
-                recipeToUpdate.Category,
-                Id = recipeIdToUpdate
-            });
-
-        if (affectedRowsCount == 0)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            return;
-        }
-
-        context.Response.StatusCode = (int)HttpStatusCode.OK;
+        return View(recipe);
     }
 }
