@@ -4,15 +4,17 @@
     ViewData["Title"] = "Recipes";
 }
 
+<button class="go-back">&#8249;</button>
+
 <ul>
     @foreach (var recipe in Model)
     {
         <div class="title">
             <li>@recipe.Title</li>
         </div>
-        <div class="price">
-            <li>@recipe.Price$</li>
+        <div>
+            <li class="price">@recipe.Price$</li>
+            <a asp-action="Details" asp-controller="Cooking" asp-route-id="@recipe.Id" class="details">Details</a>
         </div>
-        <a asp-action="Details" asp-controller="Cooking" asp-route-id="@recipe.Id">Details</a>
     }
 </ul>

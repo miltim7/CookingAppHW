@@ -1,6 +1,11 @@
 ﻿const hamburger = document.querySelector(".hamburger");
 const navLinks = document.querySelector(".nav-links");
 const links = document.querySelectorAll(".nav-links li");
+const goBack = document.querySelector('.go-back');
+
+goBack.addEventListener('click', () => {
+    window.history.back();
+})
 
 hamburger.addEventListener('click', () => {
     navLinks.classList.toggle("open");
