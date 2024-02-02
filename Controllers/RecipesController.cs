@@ -3,51 +3,55 @@ using System.Net;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 
-public class CookingController : Controller
+public class RecipesController : Controller
 {
     private ICookingRepository repository;
-    public CookingController(ICookingRepository repository)
+    public RecipesController(ICookingRepository repository)
     {
         this.repository = repository;
     }
 
-    [Route("[controller]/Recipes/GetAll")]
+    [HttpGet("[controller]/GetAll")]
     public async Task<IActionResult> Recipes()
     {
         var recipes = await repository.GetAllAsync();
-        return View(recipes);
+        return View(recipes);   
     }
 
-    [Route("[controller]/Recipes/Create")]
-    [HttpGet]
+    [HttpGet("[controller]/Create")]
     public IActionResult Create() {
         return View();
     }
 
-    [Route("[controller]/Recipes/Create")]
-    [HttpPost]
+    [HttpPost("[controller]/Create")]
     public async Task<IActionResult> Create([FromForm] RecipeDto recipeDto)
     {
-        if (string.IsNullOrWhiteSpace(recipeDto.Title) ||
-            string.IsNullOrWhiteSpace(recipeDto.Description) ||
-            string.IsNullOrWhiteSpace(recipeDto.Category)) {
-            return BadRequest("Fields Can not be empty");
+        if (string.IsNullOrWhiteSpace(recipeDto.Title)) {
+            return BadRequest("'Title' Can not be empty");
+        }
+
+        if (string.IsNullOrWhiteSpace(recipeDto.Description)) {
+            return BadRequest("'Description' Can not be empty");
+        }
+
+        if (string.IsNullOrWhiteSpace(recipeDto.Category)) {
+            return BadRequest("'Category' Can not be empty");
         }
 
         if (recipeDto.Price < 0) {
             return BadRequest("Price must be positive number or 0");
         }
 
-        if (await repository.CreateAsync(recipeDto) == 0)
-            return BadRequest($"Bad Request");
+        if (await repository.CreateAsync(recipeDto) == 0) {
+            return BadRequest();
+        }
 
         HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
 
-        return RedirectToAction("Recipes", "Cooking");
+        return RedirectToAction("Recipes", "Recipes");
     }
 
-    [Route("[controller]/Recipes/Details")]
-    [HttpGet]
+    [HttpGet("[controller]/Details")]
     public async Task<IActionResult> Details(int id)
     {
         var recipe = await repository.GetByIdAsync(id);

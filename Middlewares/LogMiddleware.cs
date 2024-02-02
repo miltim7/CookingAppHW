@@ -20,13 +20,11 @@ public class LogMiddleware : IMiddleware
             userId = context.Request.Cookies["UserId"];
         }
 
-
         string requestBody = await GetRequestBody(context);
 
         await next.Invoke(context);
 
         string responseBody = await GetResponseBody(context);
-
 
         string url = $"{context.Request.Path}{context.Request.QueryString}";
 

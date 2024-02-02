@@ -53,6 +53,11 @@ function validateCreateForm() {
 function validateLoginForm() {
     var login = document.querySelector('#login').value;
     var password = document.querySelector('#password').value;
+
+    if (login === 'unauthorized') {
+        alert('Login can not be "unauthorized"!');
+        return false;
+    }
     
     if (login === null || login.trim() === '') {
         alert('Foll the "Login" field!');
@@ -65,11 +70,4 @@ function validateLoginForm() {
     }
 
     return true;
-}
-
-function handleEnterKeyPress(event, nextInputId) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        document.getElementById(nextInputId).focus();
-    }
 }
