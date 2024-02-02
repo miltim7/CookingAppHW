@@ -6,7 +6,7 @@
 
 <button class="go-back">&#8249;</button>
 
-<form asp-asp-controller="Identity" asp-action="Login"> 
+<form onsubmit="return validateLoginForm();" asp-asp-controller="Identity" asp-action="Login"> 
     <input asp-for="@Login" id="login" type="text" placeholder="Login" onkeydown="handleEnterKeyPress(event, 'password')">
     <input asp-for="@Password" id="password" type="password" placeholder="Password"  onkeydown="handleEnterKeyPress(event, 'submit')">
     <button id="submit" type="submit">Login</button>

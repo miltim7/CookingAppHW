@@ -16,7 +16,7 @@ hamburger.addEventListener('click', () => {
     hamburger.classList.toggle("toggle");
 });
 
-function validateForm() {
+function validateCreateForm() {
     var titleValue = document.querySelector('#title').value;
     var descriptionValue = document.querySelector('#description').value;
     var categoryValue = document.querySelector('#category').value;
@@ -44,6 +44,23 @@ function validateForm() {
 
     if (priceValue < 0) {
         alert('Price can not be negative nubmer!');
+        return false;
+    }
+
+    return true;
+}
+
+function validateLoginForm() {
+    var login = document.querySelector('#login').value;
+    var password = document.querySelector('#password').value;
+    
+    if (login === null || login.trim() === '') {
+        alert('Foll the "Login" field!');
+        return false;
+    }
+
+    if (password === null || password.trim() === '') {
+        alert('Foll the "Password" field!');
         return false;
     }
 

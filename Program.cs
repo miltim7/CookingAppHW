@@ -13,7 +13,21 @@ builder.Services.AddScoped<ICookingRepository>(p =>
     return new CookingRepository(new SqlConnection(connectionString));
 });
 
+bool CanLog = builder.Configuration.GetSection("CanLog").Get<bool>();
+if (CanLog)
+{
+    builder.Services.AddTransient<LogMiddleware>();
+
+    builder.Services.AddScoped<ILogService>(provider =>
+    {
+        return new LogService(new SqlConnection(connectionString));
+    });
+}
+
 var app = builder.Build();
+
+if (CanLog)
+    app.UseMiddleware<LogMiddleware>();
 
 if (!app.Environment.IsDevelopment())
 {
