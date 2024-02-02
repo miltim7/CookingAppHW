@@ -1,5 +1,6 @@
 
 using System.Text;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class LogMiddleware : IMiddleware
 {
@@ -22,9 +23,7 @@ public class LogMiddleware : IMiddleware
 
         string requestBody = await GetRequestBody(context);
 
-        await next.Invoke(context);
-
-        string responseBody = await GetResponseBody(context);
+        string responseBody = await GetResponseBody(context, next);
 
         string url = $"{context.Request.Path}{context.Request.QueryString}";
 
@@ -47,22 +46,37 @@ public class LogMiddleware : IMiddleware
     {
         if (!context.Request.Body.CanSeek)
             context.Request.EnableBuffering();
+
         context.Request.Body.Position = 0;
+
         StreamReader requestReader = new(context.Request.Body, Encoding.UTF8);
+
         string requestBody = await requestReader.ReadToEndAsync();
+
         context.Request.Body.Position = 0;
 
         return requestBody;
     }
 
-    private async Task<string> GetResponseBody(HttpContext context)
+    private async Task<string> GetResponseBody(HttpContext context, RequestDelegate next)
     {
-        context.Response.Body.Seek(0, SeekOrigin.Begin);
         string responseBody = string.Empty;
-        using (StreamReader reader = new StreamReader(context.Response.Body, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, bufferSize: 1024, leaveOpen: true))
+
+        var originalBodyStream = context.Response.Body;
+
+        using (var newBodyStream = new MemoryStream())
         {
-            responseBody = await reader.ReadToEndAsync();
-            context.Response.Body.Position = 0; // Сбросить позицию потока обратно на начало
+            context.Response.Body = newBodyStream;
+
+            await next(context);
+
+            newBodyStream.Seek(0, SeekOrigin.Begin);
+
+            responseBody = await new StreamReader(newBodyStream).ReadToEndAsync();
+
+            newBodyStream.Seek(0, SeekOrigin.Begin);
+
+            await newBodyStream.CopyToAsync(originalBodyStream);
         }
 
         return responseBody;
