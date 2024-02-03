@@ -26,6 +26,6 @@ public class RecipesRepository : IRecipesRepository
     public async Task<Recipe> GetByIdAsync(int id) {
         string query = "select * from Recipe where Id = @Id";
 
-        return await connection.QueryFirstOrDefaultAsync<Recipe>(query, new { Id = id });
+        return await connection.QueryFirstAsync<Recipe>(query, new { Id = id });
     }
 }
