@@ -1,37 +1,28 @@
-
 using System.Text;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class LogMiddleware : IMiddleware
 {
-    private readonly ILogService service;
-    public LogMiddleware(ILogService service)
+    private readonly ILogRepository repository;
+
+    public LogMiddleware(ILogRepository repository)
     {
-        this.service = service;
+        this.repository = repository;
     }
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        string userId;
-        if (context.Request.Cookies["UserId"] is null)
-        {
-            userId = "unauthorized";
-        }
-        else
-        {
-            userId = context.Request.Cookies["UserId"];
-        }
+        var userId = context.Request.Cookies["UserId"] is null ? "unauthorized" :  context.Request.Cookies["UserId"];
 
-        string requestBody = await GetRequestBody(context);
+        var requestBody = await GetRequestBody(context);
 
-        string responseBody = await GetResponseBody(context, next);
+        var responseBody = await GetResponseBody(context, next);
 
-        string url = $"{context.Request.Path}{context.Request.QueryString}";
+        var url = $"{context.Request.Path}{context.Request.QueryString}";
 
-        int statusCode = context.Response.StatusCode;
+        var statusCode = context.Response.StatusCode;
 
-        string methodType = context.Request.Method;
+        var methodType = context.Request.Method;
 
-        await service.Log(new Log()
+        await repository.InsertAsync(new Log()
         {
             UserId = userId,
             Url = url,

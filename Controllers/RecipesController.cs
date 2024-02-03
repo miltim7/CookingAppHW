@@ -5,50 +5,44 @@ using Microsoft.AspNetCore.Mvc;
 
 public class RecipesController : Controller
 {
-    private ICookingRepository repository;
-    public RecipesController(ICookingRepository repository)
+    private IRecipesRepository repository;
+    private readonly IRecipeService service;
+
+    public RecipesController(IRecipesRepository repository, IRecipeService service)
     {
         this.repository = repository;
+        this.service = service;
     }
 
     [HttpGet("[controller]/GetAll")]
     public async Task<IActionResult> Recipes()
     {
         var recipes = await repository.GetAllAsync();
-        return View(recipes);   
+        return View(recipes);
     }
 
     [HttpGet("[controller]/Create")]
-    public IActionResult Create() {
-        return View();
-    }
+    public IActionResult Create() => View();
 
     [HttpPost("[controller]/Create")]
     public async Task<IActionResult> Create([FromForm] RecipeDto recipeDto)
     {
-        if (string.IsNullOrWhiteSpace(recipeDto.Title)) {
-            return BadRequest("'Title' Can not be empty");
+        try
+        {
+            await service.CreateAsync(recipeDto);
+
+            HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
+
+            return RedirectToAction("Recipes", "Recipes");
         }
-
-        if (string.IsNullOrWhiteSpace(recipeDto.Description)) {
-            return BadRequest("'Description' Can not be empty");
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
         }
-
-        if (string.IsNullOrWhiteSpace(recipeDto.Category)) {
-            return BadRequest("'Category' Can not be empty");
+        catch (Exception)
+        {
+            return StatusCode(500, "Something Went Wrong!");
         }
-
-        if (recipeDto.Price < 0) {
-            return BadRequest("Price must be positive number or 0");
-        }
-
-        if (await repository.CreateAsync(recipeDto) == 0) {
-            return BadRequest();
-        }
-
-        HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
-
-        return RedirectToAction("Recipes", "Recipes");
     }
 
     [HttpGet("[controller]/Details")]

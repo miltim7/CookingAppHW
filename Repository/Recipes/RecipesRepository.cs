@@ -2,10 +2,10 @@
 using System.Data.SqlClient;
 using Dapper;
 
-public class CookingRepository : ICookingRepository
+public class RecipesRepository : IRecipesRepository
 {
     private readonly SqlConnection connection;
-    public CookingRepository(SqlConnection connection)
+    public RecipesRepository(SqlConnection connection)
     {
         this.connection = connection;
     }
