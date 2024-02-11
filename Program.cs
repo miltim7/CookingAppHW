@@ -8,12 +8,29 @@ string? connectionString = builder.Configuration.GetConnectionString("CookingDB"
 
 ArgumentNullException.ThrowIfNull(connectionString);
 
-builder.Services.AddScoped<ICookingRepository>(p =>
+builder.Services.AddScoped<IRecipesRepository>(p =>
 {
-    return new CookingRepository(new SqlConnection(connectionString));
+    return new RecipesRepository(new SqlConnection(connectionString));
 });
 
+builder.Services.AddScoped<IRecipeService, RecipeService>();
+
+bool CanLog = builder.Configuration.GetSection("CanLog").Get<bool>();
+
+if (CanLog)
+{
+    builder.Services.AddTransient<LogMiddleware>();
+
+    builder.Services.AddScoped<ILogRepository>(provider =>
+    {
+        return new LogRepository(new SqlConnection(connectionString));
+    });
+}
+
 var app = builder.Build();
+
+if (CanLog)
+    app.UseMiddleware<LogMiddleware>();
 
 if (!app.Environment.IsDevelopment())
 {

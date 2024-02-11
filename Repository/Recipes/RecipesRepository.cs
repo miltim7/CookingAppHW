@@ -2,10 +2,10 @@
 using System.Data.SqlClient;
 using Dapper;
 
-public class CookingRepository : ICookingRepository
+public class RecipesRepository : IRecipesRepository
 {
     private readonly SqlConnection connection;
-    public CookingRepository(SqlConnection connection)
+    public RecipesRepository(SqlConnection connection)
     {
         this.connection = connection;
     }
@@ -26,6 +26,6 @@ public class CookingRepository : ICookingRepository
     public async Task<Recipe> GetByIdAsync(int id) {
         string query = "select * from Recipe where Id = @Id";
 
-        return await connection.QueryFirstOrDefaultAsync<Recipe>(query, new { Id = id });
+        return await connection.QueryFirstAsync<Recipe>(query, new { Id = id });
     }
 }

@@ -1,6 +1,11 @@
 ﻿const hamburger = document.querySelector(".hamburger");
 const navLinks = document.querySelector(".nav-links");
 const links = document.querySelectorAll(".nav-links li");
+const goBack = document.querySelector('.go-back');
+
+goBack.addEventListener('click', () => {
+    window.history.back();
+})
 
 hamburger.addEventListener('click', () => {
     navLinks.classList.toggle("open");
@@ -11,7 +16,7 @@ hamburger.addEventListener('click', () => {
     hamburger.classList.toggle("toggle");
 });
 
-function validateForm() {
+function validateCreateForm() {
     var titleValue = document.querySelector('#title').value;
     var descriptionValue = document.querySelector('#description').value;
     var categoryValue = document.querySelector('#category').value;
@@ -45,9 +50,24 @@ function validateForm() {
     return true;
 }
 
-function handleEnterKeyPress(event, nextInputId) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        document.getElementById(nextInputId).focus();
+function validateLoginForm() {
+    var login = document.querySelector('#login').value;
+    var password = document.querySelector('#password').value;
+
+    if (login === 'unauthorized') {
+        alert('Login can not be "unauthorized"!');
+        return false;
     }
+    
+    if (login === null || login.trim() === '') {
+        alert('Foll the "Login" field!');
+        return false;
+    }
+
+    if (password === null || password.trim() === '') {
+        alert('Foll the "Password" field!');
+        return false;
+    }
+
+    return true;
 }

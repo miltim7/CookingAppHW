@@ -4,7 +4,7 @@ body {
 }
 
 form {
-  padding-top: 7rem;
+  padding-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,7 +39,7 @@ form textarea {
 }
 
 ul {
-  padding-top: 5rem;
+  padding-top: 1rem;
   list-style: none;
 }
 
@@ -82,14 +82,34 @@ h1, h2 {
   padding: 4rem 16px 0 16px;
   border-radius: 0 0 5px 0;
   font-size: 2rem;
+  border: none;
 }
 
 .go-back:hover {
   background-color: #cfcfcf;
   color: #000000;
-  transition: 0.3s ease;
+  transition: 0.4s ease;
 }
 
 .text-center {
   font-family: 'Poppins', sans-serif;
+}
+
+.details {
+  text-decoration: none;
+  background-color: #323437;
+  padding: 10px 15px;
+  border-radius: 4px;
+  color: #002af9;
+}
+
+
+.details:hover {
+  color: #006eff;
+  background-color: #393939;
+  transition: 0.2s ease;
+}
+
+.price {
+  margin-bottom: 25px;
 }
