@@ -13,7 +13,15 @@ builder.Services.AddScoped<IRecipesRepository>(p =>
     return new RecipesRepository(new SqlConnection(connectionString));
 });
 
+builder.Services.AddScoped<IUserRepository>(p =>
+{
+    return new UserRepository(new SqlConnection(connectionString));
+});
+
 builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddScoped<IUserService>(p => {
+    return new UserService(new SqlConnection(connectionString), new UserRepository(new SqlConnection(connectionString)));
+});
 
 bool CanLog = builder.Configuration.GetSection("CanLog").Get<bool>();
 

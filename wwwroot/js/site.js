@@ -71,3 +71,30 @@ function validateLoginForm() {
 
     return true;
 }
+
+function validateRegistrationForm() {
+    var name = document.querySelector('#name').value;
+    var surname = document.querySelector('#surname').value;
+    var login = document.querySelector('#login').value;
+    var password = document.querySelector('#password').value;
+
+    if (name === null || name.trim() === '') {
+        alert('Fill the "Name" field!');
+        return false;
+    }
+
+    if (surname === null || surname.trim() === '') {
+        alert('Fill the "Surname" field!');
+        return false;
+    }
+
+    if (login === null || login.trim() === '') {
+        alert('Fill the "Login" field!');
+        return false;
+    }
+
+    if (password === null || password.trim() === '') {
+        alert('Fill the "Password" field!');
+        return false;
+    }
+}

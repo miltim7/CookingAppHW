@@ -1,28 +1,53 @@
-using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 
 public class IdentityController : Controller
 {
+    private readonly IUserService service;
+
+    public IdentityController(IUserService service)
+    {
+        this.service = service;
+    }
+
     [HttpGet]
     public IActionResult Login()
     {
         return View();
     }
 
-    [HttpPost]
-    public IActionResult Login([FromForm] UserDto userDto)
+    [HttpGet]
+    public IActionResult Registration()
     {
-        if (string.IsNullOrWhiteSpace(userDto.Login))
-        {
-            return BadRequest("Login must be filled!");
-        }
-        if (string.IsNullOrWhiteSpace(userDto.Password))
-        {
-            return BadRequest("Password must be filled!");
-        }
+        return View();
+    }
 
-        HttpContext.Response.Cookies.Append("UserId", userDto.Login);
+    [HttpPost]
+    public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
+    {
+        try
+        {
+            await service.LoginAsync(loginDto);
 
-        return RedirectToAction("Index", "Home");
+            int userId = await service.GetIdByLogin(loginDto.Login);
+            HttpContext.Response.Cookies.Append("UserId", userId.ToString());
+
+            return RedirectToAction("Index", "Home");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Something Went Wrong!");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Registration(UserDto userDto)
+    {
+        await service.CreateAsync(userDto);
+
+        return RedirectToAction("Login", "Identity");
     }
 }

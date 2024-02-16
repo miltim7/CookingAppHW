@@ -22,7 +22,17 @@ public class RecipesController : Controller
     }
 
     [HttpGet("[controller]/Create")]
-    public IActionResult Create() => View();
+    public IActionResult Create()
+    {
+        if (HttpContext.Request.Cookies["UserId"] is null)
+        {
+            return RedirectToAction("Login", "Identity");
+        }
+
+        ViewData["UserId"] = HttpContext.Request.Cookies["UserId"];
+
+        return View();
+    }
 
     [HttpPost("[controller]/Create")]
     public async Task<IActionResult> Create([FromForm] RecipeDto recipeDto)

@@ -1,4 +1,3 @@
-
 public class RecipeService : IRecipeService
 {
     private readonly IRecipesRepository repository;
@@ -10,29 +9,16 @@ public class RecipeService : IRecipeService
 
     public async Task CreateAsync(RecipeDto recipeDto)
     {
-        if (string.IsNullOrWhiteSpace(recipeDto.Title))
-        {
-            throw new ArgumentException("'Title' Can not be empty");
-        }
+        ArgumentException.ThrowIfNullOrEmpty(recipeDto.Title, nameof(recipeDto.Title));
 
-        if (string.IsNullOrWhiteSpace(recipeDto.Description))
-        {
-            throw new ArgumentException("'Description' Can not be empty");
-        }
+        ArgumentException.ThrowIfNullOrEmpty(recipeDto.Description, nameof(recipeDto.Description));
 
-        if (string.IsNullOrWhiteSpace(recipeDto.Category))
-        {
-            throw new ArgumentException("'Category' Can not be empty");
-        }
+        ArgumentException.ThrowIfNullOrEmpty(recipeDto.Category, nameof(recipeDto.Category));
 
         if (recipeDto.Price < 0)
-        {
-            throw new ArgumentException("Price must be positive number or 0");
-        }
+            throw new ArgumentException("Price must be positive number or 0!");
         
         if (await repository.CreateAsync(recipeDto) == 0)
-        {
             throw new Exception();
-        }
     }
 }

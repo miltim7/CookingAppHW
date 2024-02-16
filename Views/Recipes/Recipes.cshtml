@@ -6,15 +6,22 @@
 
 <button class="go-back">&#8249;</button>
 
-<ul>
-    @foreach (var recipe in Model)
-    {
-        <div class="title">
-            <li>@recipe.Title</li>
-        </div>
-        <div>
-            <li class="price">@recipe.Price$</li>
-            <a asp-action="Details" asp-controller="Recipes" asp-route-id="@recipe.Id" class="details">Details</a>
-        </div>
-    }
-</ul>
+@if (!Model.Any())
+{
+    <h1>There is no recipes</h1>
+}
+else
+{
+    <ul>
+        @foreach (var recipe in Model)
+        {
+            <div class="title">
+                <li>@recipe.Title</li>
+            </div>
+            <div>
+                <li class="price">@recipe.Price$</li>
+                <a asp-action="Details" asp-controller="Recipes" asp-route-id="@recipe.Id" class="details">Details</a>
+            </div>
+        }
+    </ul>
+}
