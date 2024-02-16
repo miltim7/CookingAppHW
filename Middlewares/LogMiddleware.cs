@@ -10,7 +10,15 @@ public class LogMiddleware : IMiddleware
     }
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var userId = int.Parse(context.Request.Cookies["UserId"]);
+        int userId;
+        if (context.Request.Cookies["UserId"] is not null)
+        {
+            userId = int.Parse(context.Request.Cookies["UserId"]);
+        }
+        else
+        {
+            userId = 0;
+        }
 
         var requestBody = await GetRequestBody(context);
 

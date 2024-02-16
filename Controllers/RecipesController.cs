@@ -1,6 +1,7 @@
 using System.Data.SqlClient;
 using System.Net;
 using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 public class RecipesController : Controller
@@ -22,13 +23,9 @@ public class RecipesController : Controller
     }
 
     [HttpGet("[controller]/Create")]
+    [Authorize]
     public IActionResult Create()
     {
-        if (HttpContext.Request.Cookies["UserId"] is null)
-        {
-            return RedirectToAction("Login", "Identity");
-        }
-
         ViewData["UserId"] = HttpContext.Request.Cookies["UserId"];
 
         return View();

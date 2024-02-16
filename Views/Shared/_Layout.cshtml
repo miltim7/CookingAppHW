@@ -1,20 +1,28 @@
-﻿<!DOCTYPE html>
+﻿@inject IAuthorizationService authenticationService
+
+@{
+    bool isAuthenticated = base.User.Identity.IsAuthenticated;
+}
+
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CookingAppHW</title>
+    <title>Cooking</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CookingAppHW.styles.css" asp-append-version="true" />
-     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 </head>
+
 <body>
     <header>
         <nav>
             <div class="logo">
-                <span><a class="logo-link" href="/Home">COOKING</a></span>   
+                <span><a class="logo-link" href="/Home">COOKING</a></span>
             </div>
             <div class="hamburger">
                 <div class="line1"></div>
@@ -23,9 +31,22 @@
             </div>
             <ul class="nav-links">
                 <li><a href="/Recipes/GetAll">Recipes</a></li>
-                <li><a href="/Recipes/Create">Create</a></li>
-                <li><a href="/Identity/Login">Login</a></li>
-                <li><a href="/Identity/Registration">Registration</a></li>
+
+                @if (isAuthenticated)
+                {
+                    <li><a href="/Recipes/Create">Create</a></li>
+                }
+
+                @if (!isAuthenticated)
+                {
+                    <li><a href="/Identity/Login">Login</a></li>
+                    <li><a href="/Identity/Registration">Registration</a></li>
+                }
+
+                @if (isAuthenticated)
+                {
+                    <li><a asp-controller="Identity" asp-action="LogOut">Log Out</a></li>
+                }
             </ul>
         </nav>
     </header>
@@ -35,4 +56,5 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
+
 </html>
