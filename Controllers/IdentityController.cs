@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -36,6 +37,7 @@ public class IdentityController : Controller
             await service.LoginAsync(loginDto);
 
             int userId = await service.GetIdByLogin(loginDto.Login);
+
             HttpContext.Response.Cookies.Append("UserId", userId.ToString());
 
             var claims = new List<Claim> {
@@ -44,7 +46,7 @@ public class IdentityController : Controller
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            await HttpContext.SignInAsync(
+            await HttpContext.SignInAsync(    
                 scheme: CookieAuthenticationDefaults.AuthenticationScheme,
                 principal: new ClaimsPrincipal(claimsIdentity)
             );

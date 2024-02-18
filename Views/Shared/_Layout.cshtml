@@ -6,7 +6,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,12 +16,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 </head>
-
 <body>
     <header>
         <nav>
             <div class="logo">
-                <span><a class="logo-link" href="/Home">COOKING</a></span>
+                <span><a class="logo-link" href="/Home/Main">COOKING</a></span>
             </div>
             <div class="hamburger">
                 <div class="line1"></div>
@@ -30,6 +28,11 @@
                 <div class="line3"></div>
             </div>
             <ul class="nav-links">
+                @if (isAuthenticated)
+                {
+                    <li><a href="/Home/Index">Home</a></li>   
+                }
+
                 <li><a href="/Recipes/GetAll">Recipes</a></li>
 
                 @if (isAuthenticated)
@@ -45,7 +48,7 @@
 
                 @if (isAuthenticated)
                 {
-                    <li><a asp-controller="Identity" asp-action="LogOut">Log Out</a></li>
+                    <li><a class="logout" asp-controller="Identity" asp-action="LogOut">LogOut</a></li>
                 }
             </ul>
         </nav>
@@ -56,5 +59,4 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
-
 </html>

@@ -57,6 +57,11 @@ ul div {
   margin-right: 40px;
 }
 
+span {
+  color: #4b8c5d;
+  font-weight: bold;
+}
+
 .title {
   margin-top: 30px;
   background-color: #404040;
@@ -112,4 +117,31 @@ h1, h2 {
 
 .price {
   margin-bottom: 25px;
+}
+
+.interpretation {
+  margin: 50px;
+  font-size: 25px;
+  font-family: 'Poppins', sans-serif;
+  margin-top: -100px;
+}
+
+.logout {
+  text-decoration: none;
+  margin: 0 0.7vw;
+  color: #b8b8b8;
+}
+
+.logout:hover {
+  color: #eeeeee;
+  transition: 0.2s ease;
+}
+
+.profile {
+  color: rgb(55, 144, 89);
+}
+
+.profile:hover {
+  color: rgb(49, 114, 75);
+  transition: 0.1s ease;
 }

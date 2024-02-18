@@ -53,4 +53,10 @@ public class UserService : IUserService
 
         return (await connection.QueryFirstOrDefaultAsync<User>(query, new { Login = login })).Id;
     }
+
+    public async Task<User> GetUserById(int id) {
+        string query = "select * from Users where [Id] = @Id";
+
+        return await connection.QueryFirstOrDefaultAsync<User>(query, new { Id = id });
+    }
 }
