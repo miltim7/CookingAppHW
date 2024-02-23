@@ -54,9 +54,33 @@ public class UserService : IUserService
         return (await connection.QueryFirstOrDefaultAsync<User>(query, new { Login = login })).Id;
     }
 
-    public async Task<User> GetUserById(int id) {
+    public async Task<User> GetUserById(int id)
+    {
         string query = "select * from Users where [Id] = @Id";
 
         return await connection.QueryFirstOrDefaultAsync<User>(query, new { Id = id });
+    }
+
+    public async Task ChangePasswordAsync(string password, int id)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(password, nameof(password));
+
+        string query = "update Users set [Password] = @Password where Id = @Id;";
+
+        await connection.ExecuteAsync(query, new { Password = password, Id = id });
+
+    }
+
+    public async Task ChangeProfileAsync(User user)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(user.Name, nameof(user.Name));
+
+        ArgumentException.ThrowIfNullOrEmpty(user.Surname, nameof(user.Surname));
+
+        ArgumentException.ThrowIfNullOrEmpty(user.Login, nameof(user.Login));
+
+        string query = "update Users set [Login] = @Login, [Name] = @Name, [Surname] = @Surname where Id = @Id;";
+
+        await connection.ExecuteAsync(query, user);
     }
 }

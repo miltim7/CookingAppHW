@@ -79,7 +79,8 @@ h1, h2 {
   padding: 100px;
 }
 
-.go-back {
+.go-back,
+.cancel-change-password {
   background-color: #565656;
   color: #ffffff;
   text-decoration: none;
@@ -90,7 +91,8 @@ h1, h2 {
   border: none;
 }
 
-.go-back:hover {
+.go-back:hover,
+.cancel-change-password:hover {
   background-color: #cfcfcf;
   color: #000000;
   transition: 0.4s ease;
@@ -100,23 +102,10 @@ h1, h2 {
   font-family: 'Poppins', sans-serif;
 }
 
-.details {
-  text-decoration: none;
-  background-color: #323437;
-  padding: 10px 15px;
-  border-radius: 4px;
-  color: #002af9;
-}
-
-
-.details:hover {
-  color: #006eff;
-  background-color: #393939;
-  transition: 0.2s ease;
-}
-
 .price {
   margin-bottom: 25px;
+  font-size: 20px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .interpretation {
@@ -144,4 +133,70 @@ h1, h2 {
 .profile:hover {
   color: rgb(49, 114, 75);
   transition: 0.1s ease;
+}
+
+#changePasswordButton {
+  align-self: flex-start;
+  margin: 10px 0 10px 80px;
+  padding: 10px 20px 10px 20px;
+  background-color: transparent;
+  border: none;
+  background-color: #1969bf;
+  color: #b2b2bb;
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: 'Poppins', sans-serif;
+}
+
+#changePasswordButton:hover {
+  background-color: rgb(45, 63, 161);
+  transition: 0.2s ease;
+}
+
+label {
+  color: #a7afc1;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif; 
+}
+
+.error {
+  margin-bottom: -20px ;
+  margin-left: 80px;
+  margin-top: -80px;
+  color: #d11515;
+  align-items: center ;
+}
+
+.create-recipe {
+  display: flex;
+  margin: 20px 0 -20px 30px;
+  border: none;
+  background-color: #1e924aff;
+  color: #ffffff;
+  padding: 7px 20px;
+  font-size: 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  width: 185px;
+  font-family: 'Poppins', sans-serif; 
+}
+
+.create-recipe:hover {
+  background-color: rgb(23, 87, 47);
+  color: #ffffff;
+  transition: 0.2s ease;
+}
+
+.details {
+  text-decoration: none;
+  background-color: #323437;
+  padding: 15px 10px 5px 10px;
+  border-radius: 4px;
+  color: #002af9;
+}
+
+.details:hover {
+  background-color: #393939;
+  transition: 0.2s ease;
+  color: #006eff;
 }

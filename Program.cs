@@ -27,7 +27,10 @@ builder.Services.AddScoped<IUserRepository>(p =>
     return new UserRepository(new SqlConnection(connectionString));
 });
 
-builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddScoped<IRecipeService>(p => {
+    return new RecipeService(new SqlConnection(connectionString), new RecipesRepository(new SqlConnection(connectionString)));
+});
+
 builder.Services.AddScoped<IUserService>(p =>
 {
     return new UserService(new SqlConnection(connectionString), new UserRepository(new SqlConnection(connectionString)));

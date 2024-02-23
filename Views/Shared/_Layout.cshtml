@@ -9,12 +9,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cooking</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CookingAppHW.styles.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
     <header>
@@ -33,11 +34,11 @@
                     <li><a href="/Home/Index">Home</a></li>   
                 }
 
-                <li><a href="/Recipes/GetAll">Recipes</a></li>
+                <li><a href="/Recipes/GetAll">All Recipes</a></li>
 
                 @if (isAuthenticated)
                 {
-                    <li><a href="/Recipes/Create">Create</a></li>
+                    <li><a href="/Recipes/MyRecipes">My Recipes</a></li>
                 }
 
                 @if (!isAuthenticated)
@@ -48,6 +49,7 @@
 
                 @if (isAuthenticated)
                 {
+                    <li><a href="/Identity/Profile">Profile</a></li>
                     <li><a class="logout" asp-controller="Identity" asp-action="LogOut">LogOut</a></li>
                 }
             </ul>

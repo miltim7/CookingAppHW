@@ -16,85 +16,59 @@ hamburger.addEventListener('click', () => {
     hamburger.classList.toggle("toggle");
 });
 
-function validateCreateForm() {
-    var titleValue = document.querySelector('#title').value;
-    var descriptionValue = document.querySelector('#description').value;
-    var categoryValue = document.querySelector('#category').value;
-    var priceValue = document.querySelector('#price').value;
+function toggleChangePasswordForm() {
+    var changePasswordForm = document.querySelector("#changePasswordForm");
+    changePasswordForm.style.display = "flex";
 
-    if (titleValue === null || titleValue.trim() === '') {
-        alert('Fill the "Title" Field!');
+    var profileForm = document.querySelector("#profileForm");
+    profileForm.style.display = "none";
+
+    var changePasswordButton = document.querySelector('#changePasswordButton');
+    changePasswordButton.style.display = "none";
+
+    var goBackButton = document.querySelector('.go-back');
+    goBackButton.style.display = "none";
+
+    var cancelChangePasswordButton = document.querySelector('.cancel-change-password');
+    cancelChangePasswordButton.style.display = "inline-block";
+
+    cancelChangePasswordButton.addEventListener('click', () => {
+        profileForm.style.display = "flex";
+        changePasswordForm.style.display = 'none';
+
+        goBackButton.style.display = "inline-block";
+        cancelChangePasswordButton.style.display = "none";
+
+        changePasswordButton.style.display = "flex";
+    })
+}
+
+function changePassword(password) {
+    var currentPassword = document.querySelector("#currentPassword").value;
+    var newPassword = document.querySelector("#newPassword").value;
+    var confirmNewPassword = document.querySelector("#confirmNewPassword").value;
+
+    if (currentPassword.trim() === "" || currentPassword === null ||
+        newPassword.trim() === "" || newPassword === null ||
+        confirmNewPassword.trim() === "" || confirmNewPassword === null) {
+        alert("Fields can not be empty!");
         return false;
     }
 
-    if (descriptionValue === null || descriptionValue.trim() === '') {
-        alert('Fill the "Description" field');
+    if (currentPassword !== password) {
+        alert("Old Password is incorrect!");
         return false;
     }
 
-    if (categoryValue === null || categoryValue.trim() === '') {
-        alert('Fill the "Category" field');
+    if (newPassword !== confirmNewPassword) {
+        alert("New passwords don't match");
         return false;
     }
 
-    if (priceValue === null || priceValue.trim() === '') {
-        alert('Fill the "Price" field');
-        return false;
-    }
-
-    if (priceValue < 0) {
-        alert('Price can not be negative nubmer!');
+    if (newPassword === currentPassword) {
+        alert("New password is the same as old");
         return false;
     }
 
     return true;
-}
-
-function validateLoginForm() {
-    var login = document.querySelector('#login').value;
-    var password = document.querySelector('#password').value;
-
-    if (login === 'unauthorized') {
-        alert('Login can not be "unauthorized"!');
-        return false;
-    }
-    
-    if (login === null || login.trim() === '') {
-        alert('Foll the "Login" field!');
-        return false;
-    }
-
-    if (password === null || password.trim() === '') {
-        alert('Foll the "Password" field!');
-        return false;
-    }
-
-    return true;
-}
-
-function validateRegistrationForm() {
-    var name = document.querySelector('#name').value;
-    var surname = document.querySelector('#surname').value;
-    var login = document.querySelector('#login').value;
-    var password = document.querySelector('#password').value;
-
-    if (name === null || name.trim() === '') {
-        alert('Fill the "Name" field!');
-        return false;
-    }
-
-    if (surname === null || surname.trim() === '') {
-        alert('Fill the "Surname" field!');
-        return false;
-    }
-
-    if (login === null || login.trim() === '') {
-        alert('Fill the "Login" field!');
-        return false;
-    }
-
-    if (password === null || password.trim() === '') {
-        alert('Fill the "Password" field!');
-        return false;
-    }
 }

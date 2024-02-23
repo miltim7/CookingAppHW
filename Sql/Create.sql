@@ -1,6 +1,7 @@
 create database CookingAppDB;
 
-create table Recipes (
+create table Recipes 
+(
     [Id] int primary key identity,
     [Title] nvarchar(50) not null,
     [Description] nvarchar(max) not null,
@@ -20,7 +21,8 @@ create table Logs
     [ResponseBody] nvarchar(max)
 )
 
-create table Users(
+create table Users
+(
     [Id] int primary key identity,
     [Name] nvarchar(100) not null,
     [Surname] nvarchar(100) not null,

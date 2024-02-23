@@ -3,4 +3,6 @@ public interface IUserService {
     Task CreateAsync(UserDto userDto);
     Task<int> GetIdByLogin(string login);
     Task<User> GetUserById(int id);
+    Task ChangePasswordAsync(string password, int id);
+    Task ChangeProfileAsync(User user);
 }

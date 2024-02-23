@@ -1,9 +1,11 @@
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 public class IdentityController : Controller
 {
@@ -15,7 +17,6 @@ public class IdentityController : Controller
     }
 
     [HttpGet]
-    [AllowAnonymous]
     public IActionResult Login(string? returnUrl)
     {
         ViewData["returnUrl"] = returnUrl;
@@ -29,7 +30,6 @@ public class IdentityController : Controller
     }
 
     [HttpPost]
-    [AllowAnonymous]
     public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
     {
         try
@@ -46,7 +46,7 @@ public class IdentityController : Controller
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            await HttpContext.SignInAsync(    
+            await HttpContext.SignInAsync(
                 scheme: CookieAuthenticationDefaults.AuthenticationScheme,
                 principal: new ClaimsPrincipal(claimsIdentity)
             );
@@ -55,6 +55,58 @@ public class IdentityController : Controller
                 return RedirectToAction("Index", "Home");
 
             return RedirectPermanent(loginDto.ReturnUrl);
+        }
+        catch (ArgumentException ex)
+        {
+            HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            ViewData["ErrorMessage"] = ex.Message;
+            return View();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Something Went Wrong!");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Registration(UserDto userDto)
+    {
+        try
+        {
+            await service.CreateAsync(userDto);
+        }
+        catch (ArgumentException ex)
+        {
+            HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            ViewData["ErrorMessage"] = ex.Message;
+            return View();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Something Went Wrong!");
+        }
+
+        return RedirectToAction("Login", "Identity");
+    }
+
+    [HttpGet("[controller]/Profile")]
+    [Authorize]
+    public async Task<IActionResult> Profile()
+    {
+        return View(await service.GetUserById(int.Parse(HttpContext.Request.Cookies["UserId"])));
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> ChangeProfile([FromForm] User user)
+    {
+        try
+        {
+            user.Id = int.Parse(HttpContext.Request.Cookies["UserId"]);
+
+            await service.ChangeProfileAsync(user);
+
+            return RedirectToAction("Index", "Home");
         }
         catch (ArgumentException ex)
         {
@@ -67,11 +119,23 @@ public class IdentityController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Registration(UserDto userDto)
+    [Authorize]
+    public async Task<IActionResult> ChangePassword([FromForm] string newPassword)
     {
-        await service.CreateAsync(userDto);
+        try
+        {
+            await service.ChangePasswordAsync(newPassword, int.Parse(HttpContext.Request.Cookies["UserId"]));
 
-        return RedirectToAction("Login", "Identity");
+            return RedirectToAction("Profile", "Identity");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Something Went Wrong!");
+        }
     }
 
     [HttpGet]

@@ -9,7 +9,9 @@
 
 <button class="go-back">&#8249;</button>
 
-<form onsubmit="return validateRegistrationForm();" asp-controller="Identity" asp-action="Registration" method="Post">
+<p class="error">@ViewData["ErrorMessage"]</p>
+
+<form asp-controller="Identity" asp-action="Registration" method="Post">
     <input id="name" asp-for="@Name" type="text" placeholder="Name">
     <input id="surname" asp-for="@Surname" type="text" placeholder="Surname">
     <input id="login" asp-for="@Login" type="text" placeholder="Login">
