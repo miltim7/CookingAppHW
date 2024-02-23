@@ -1,20 +1,27 @@
-﻿<!DOCTYPE html>
+﻿@inject IAuthorizationService authenticationService
+
+@{
+    bool isAuthenticated = base.User.Identity.IsAuthenticated;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CookingAppHW</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CookingAppHW.styles.css" asp-append-version="true" />
-     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">
-                <span><a class="logo-link" href="/Home">COOKING</a></span>   
+                <span><a class="logo-link" href="/Home/Main">COOKING</a></span>
             </div>
             <div class="hamburger">
                 <div class="line1"></div>
@@ -22,9 +29,29 @@
                 <div class="line3"></div>
             </div>
             <ul class="nav-links">
-                <li><a href="/Recipes/GetAll">Recipes</a></li>
-                <li><a href="/Recipes/Create">Create</a></li>
-                <li><a href="/Identity/Login">Login</a></li>
+                @if (isAuthenticated)
+                {
+                    <li><a href="/Home/Index">Home</a></li>   
+                }
+
+                <li><a href="/Recipes/GetAll">All Recipes</a></li>
+
+                @if (isAuthenticated)
+                {
+                    <li><a href="/Recipes/MyRecipes">My Recipes</a></li>
+                }
+
+                @if (!isAuthenticated)
+                {
+                    <li><a href="/Identity/Login">Login</a></li>
+                    <li><a href="/Identity/Registration">Registration</a></li>
+                }
+
+                @if (isAuthenticated)
+                {
+                    <li><a href="/Identity/Profile">Profile</a></li>
+                    <li><a class="logout" asp-controller="Identity" asp-action="LogOut">LogOut</a></li>
+                }
             </ul>
         </nav>
     </header>

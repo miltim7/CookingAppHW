@@ -5,15 +5,19 @@
     var Description = string.Empty;
     var Category = string.Empty;
     int Price = 0;
+    int UserId = int.Parse(ViewData["UserId"].ToString());
 }
 
 <button class="go-back">&#8249;</button>
 
-<form onsubmit="return validateCreateForm();" asp-asp-controller="Recipes" asp-action="Create" method="post">
+<p class="error">@ViewData["ErrorMessage"]</p>
+
+<form asp-asp-controller="Recipes" asp-action="Create" method="post">
     <input id="title" asp-for="@Title" type="text" placeholder="Title" />
     <textarea id="description" asp-for="@Description" placeholder="Description" cols="30" rows="10"></textarea>
     <input id="category" asp-for="@Category" type="text" placeholder="Category" />
     <input id="price" asp-for="@Price" type="number"placeholder="Price">
+    <input type="text" asp-for="@UserId" hidden>
 
-    <input id="submit" type="submit" value="Create" />
+    <input id="submit" type="submit" value="Create"/>
 </form>

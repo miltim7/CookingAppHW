@@ -1,6 +1,7 @@
 using System.Data.SqlClient;
 using System.Net;
 using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 public class RecipesController : Controller
@@ -22,9 +23,25 @@ public class RecipesController : Controller
     }
 
     [HttpGet("[controller]/Create")]
-    public IActionResult Create() => View();
+    [Authorize]
+    public IActionResult Create()
+    {
+        ViewData["UserId"] = HttpContext.Request.Cookies["UserId"];
+
+        return View();
+    }
+
+    [HttpGet("[controller]/MyRecipes")]
+    [Authorize]
+    public async Task<IActionResult> MyRecipes()
+    {
+        var recipes = await service.GetMyAsync(int.Parse(HttpContext.Request.Cookies["UserId"]));
+
+        return View(recipes);
+    }
 
     [HttpPost("[controller]/Create")]
+    [Authorize]
     public async Task<IActionResult> Create([FromForm] RecipeDto recipeDto)
     {
         try
@@ -33,7 +50,7 @@ public class RecipesController : Controller
 
             HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
 
-            return RedirectToAction("Recipes", "Recipes");
+            return RedirectToAction("MyRecipes", "Recipes");
         }
         catch (ArgumentException ex)
         {

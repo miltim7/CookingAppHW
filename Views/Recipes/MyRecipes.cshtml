@@ -1,10 +1,12 @@
 @model IEnumerable<Recipe>
 
 @{
-    ViewData["Title"] = "Recipes";
+    ViewData["Title"] = "My Recipes";
 }
 
 <button class="go-back">&#8249;</button>
+
+<a href="/Recipes/Create" class="create-recipe">Create New Recipe</a>
 
 @if (!Model.Any())
 {
@@ -20,6 +22,7 @@ else
             </div>
             <div>
                 <li class="price">@recipe.Price$</li>
+
                 <a href="/Recipes/Details?id=@recipe.Id" class="details"><i class="material-icons">info</i></a>
             </div>
         }
