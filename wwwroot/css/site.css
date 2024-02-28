@@ -1,115 +1,157 @@
-body {
-  background-color: #323437;
-  overflow-x: hidden;
-}
+@import url(https://fonts.googleapis.com/css?family=Poppins:300);
 
-form {
-  padding-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-form input,
-form textarea {
-  padding: 20px;
-  display: flex;
-  width: 90vw;
-  border-radius: 20px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
   border: none;
-  margin-bottom: 15px;
-  background-color: #43464d;
-  color: #ffffff;
-}
-
-#submit {
-  display: block;
-  text-align: center;
-  width: 90vw;
-  padding: 17px;
-  border-radius: 15px;
-  border: none;
-  background-color: #477353;
-  color: #ffffff;
-}
-
-#submit:hover {
-  background-color: #4b8c5d;
-  transition: 0.4s ease;
-}
-
-ul {
-  padding-top: 1rem;
-  list-style: none;
-}
-
-li {
-  color: #ffffff;
-}
-
-ul {
-  border-radius: 10px;
-}
-
-ul div {
-  padding: 30px;
-  background-color: #43464d;
-  margin-right: 40px;
-}
-
-.title {
-  margin-top: 30px;
-  background-color: #404040;
-  border-radius: 10px 10px 0 0;
-  font-size: 25px;
-}
-
-p {
-  padding-top: 5rem;
-  color: #ffffff;
-}
-
-h1, h2 {
-  color: #ffffff;
-  padding: 100px;
+  outline: none;
+  scroll-behavior: smooth;
+  font-family: 'Poppins', sans-serif;
 }
 
 .go-back {
-  background-color: #565656;
+  background-color: #c9baba;
   color: #ffffff;
   text-decoration: none;
   display: inline-block;
-  padding: 4rem 16px 0 16px;
-  border-radius: 0 0 5px 0;
+  padding: 6rem 16px 0 16px;
+  border-radius: 0 0 4px 0;
   font-size: 2rem;
   border: none;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .go-back:hover {
   background-color: #cfcfcf;
-  color: #000000;
+  color: #a1a1a1;
   transition: 0.4s ease;
 }
 
-.text-center {
-  font-family: 'Poppins', sans-serif;
+body {
+  box-sizing: border-box;
 }
 
-.details {
+.error {
+  color: red;
+}
+
+.form-name {
+  font-weight: bold;
+  color: #d6bf29;
+  font-size: 18px;
+}
+
+.logout {
+  
+}
+
+.recipe-ul {
+  margin-top: 100px;
+  margin-bottom: 5rem;
   text-decoration: none;
-  background-color: #323437;
-  padding: 10px 15px;
-  border-radius: 4px;
-  color: #002af9;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 80px;
+  padding: 20px;
 }
 
-
-.details:hover {
-  color: #006eff;
-  background-color: #393939;
-  transition: 0.2s ease;
+.delete {
+  cursor: pointer;
+  color: red;
 }
 
-.price {
-  margin-bottom: 25px;
+.delete:hover {
+  color: rgb(190, 35, 35);
+  transition: 0.4s ease;
+}
+
+.edit {
+  cursor: pointer;
+  color: #ffe202;
+}
+
+.edit:hover {
+  color: #bfac1b;
+  transition: 0.4s ease;
+}
+
+.recipe-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 250px;
+  max-height: 300px;
+}
+
+.recipe-div img {
+  width: 250px;
+  height: 250px;
+  border-radius: 10px;
+}
+
+.recipe-image {
+  width: 250px;
+  max-height: 250px;
+}
+
+.edit-form p {
+  font-weight: bold;
+  color: #d6bf29;
+  font-size: 18px;
+}
+
+.edit-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 200px;
+}
+
+.edit-form {
+  position: relative;
+  background: #ffffff;
+  max-width: 360px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  border-radius: 15px;
+}
+
+.edit-form input,
+.edit-form textarea {
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-radius: 15px;
+}
+
+.edit-form button {
+  text-transform: uppercase;
+  outline: 0;
+  background: #3324be;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  border-radius: 15px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+
+.edit-form button:hover,
+.edit-form button:active,
+.edit-form button:focus {
+  background: #2957d6;
 }

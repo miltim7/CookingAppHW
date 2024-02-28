@@ -1,0 +1,43 @@
+@model Recipe
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="edit-div">
+    <p class="error">@ViewData["ErrorMessage"]</p>
+
+    <p class="form-name">Edit Recipe</p>
+    <form onsubmit="editRecipeSubmit(Id)" class="edit-form">
+
+        <input type="number" asp-for="Id" hidden>
+        <input type="text" asp-for="Title" placeholder="Title">
+        <input type="text" asp-for="Description" placeholder="Description">
+        <input type="text" asp-for="Category" placeholder="Category">
+        <input type="nubmer" asp-for="Price" placeholder="Price">
+
+        <button>Save Changes</button>
+    </form>
+</div>
+
+<script>
+    async function editRecipeSubmit(id) {
+        const formData = new FormData(document.querySelector('.edit-form'));
+
+        let json = {};
+
+        for (let [key, value] of formData.entries()) {
+            json[key] = value;
+        }
+
+        await fetch('/Recipes/Edit/' + id, {
+            method: "PUT",
+            body: JSON.stringify(json),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(() => {
+            location.reload();
+        });
+    }
+</script>

@@ -1,13 +1,9 @@
-﻿const hamburger = document.querySelector(".hamburger");
+﻿const goBack = document.querySelector('.go-back');
+const hamburger = document.querySelector(".hamburger");
 const navLinks = document.querySelector(".nav-links");
 const links = document.querySelectorAll(".nav-links li");
-const goBack = document.querySelector('.go-back');
 
-goBack.addEventListener('click', () => {
-    window.history.back();
-})
-
-hamburger.addEventListener('click', () => {
+hamburger.addEventListener('click', ()=>{
     navLinks.classList.toggle("open");
     links.forEach(link => {
         link.classList.toggle("fade");
@@ -16,56 +12,62 @@ hamburger.addEventListener('click', () => {
     hamburger.classList.toggle("toggle");
 });
 
-function validateCreateForm() {
-    var titleValue = document.querySelector('#title').value;
-    var descriptionValue = document.querySelector('#description').value;
-    var categoryValue = document.querySelector('#category').value;
-    var priceValue = document.querySelector('#price').value;
 
-    if (titleValue === null || titleValue.trim() === '') {
-        alert('Fill the "Title" Field!');
-        return false;
-    }
+goBack.addEventListener('click', () => {
+    window.history.back();
+})
 
-    if (descriptionValue === null || descriptionValue.trim() === '') {
-        alert('Fill the "Description" field');
-        return false;
-    }
+function toggleChangePasswordForm() {
+    var changePasswordForm = document.querySelector("#changePasswordForm");
+    changePasswordForm.style.display = "flex";
 
-    if (categoryValue === null || categoryValue.trim() === '') {
-        alert('Fill the "Category" field');
-        return false;
-    }
+    var profileForm = document.querySelector("#profileForm");
+    profileForm.style.display = "none";
 
-    if (priceValue === null || priceValue.trim() === '') {
-        alert('Fill the "Price" field');
-        return false;
-    }
+    var changePasswordButton = document.querySelector('#changePasswordButton');
+    changePasswordButton.style.display = "none";
 
-    if (priceValue < 0) {
-        alert('Price can not be negative nubmer!');
-        return false;
-    }
+    var goBackButton = document.querySelector('.go-back');
+    goBackButton.style.display = "none";
 
-    return true;
+    var cancelChangePasswordButton = document.querySelector('.cancel-change-password');
+    cancelChangePasswordButton.style.display = "inline-block";
+
+    cancelChangePasswordButton.addEventListener('click', () => {
+        profileForm.style.display = "flex";
+        changePasswordForm.style.display = 'none';
+
+        goBackButton.style.display = "inline-block";
+        cancelChangePasswordButton.style.display = "none";
+
+        changePasswordButton.style.display = "flex";
+    })
 }
 
-function validateLoginForm() {
-    var login = document.querySelector('#login').value;
-    var password = document.querySelector('#password').value;
+function changePassword(password) {
+    var currentPassword = document.querySelector("#currentPassword").value;
+    var newPassword = document.querySelector("#newPassword").value;
+    var confirmNewPassword = document.querySelector("#confirmNewPassword").value;
 
-    if (login === 'unauthorized') {
-        alert('Login can not be "unauthorized"!');
-        return false;
-    }
-    
-    if (login === null || login.trim() === '') {
-        alert('Foll the "Login" field!');
+    if (currentPassword.trim() === "" || currentPassword === null ||
+        newPassword.trim() === "" || newPassword === null ||
+        confirmNewPassword.trim() === "" || confirmNewPassword === null) {
+        alert("Fields can not be empty!");
         return false;
     }
 
-    if (password === null || password.trim() === '') {
-        alert('Foll the "Password" field!');
+    if (currentPassword !== password) {
+        alert("Old Password is incorrect!");
+        return false;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+        alert("New passwords don't match");
+        return false;
+    }
+
+    if (newPassword === currentPassword) {
+        alert("New password is the same as old");
         return false;
     }
 

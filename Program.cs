@@ -1,4 +1,10 @@
 using System.Data.SqlClient;
+using System.Reflection;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,14 +12,37 @@ builder.Services.AddControllersWithViews();
 
 string? connectionString = builder.Configuration.GetConnectionString("CookingDB");
 
-ArgumentNullException.ThrowIfNull(connectionString);
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Identity/Login";
+        options.ReturnUrlParameter = "returnUrl";
+    });
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddDbContext<MyDbContext>(dbContextOptionsBuilder =>
+{
+    dbContextOptionsBuilder.UseSqlServer(connectionString, useSqlOptions => {
+        useSqlOptions.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
+    });
+});
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    options.Password.RequireNonAlphanumeric = true;
+})
+    .AddEntityFrameworkStores<MyDbContext>();
 
 builder.Services.AddScoped<IRecipesRepository>(p =>
 {
     return new RecipesRepository(new SqlConnection(connectionString));
 });
 
-builder.Services.AddScoped<IRecipeService, RecipeService>();
+
+builder.Services.AddScoped<IRecipeService>(p => {
+    return new RecipeService(new SqlConnection(connectionString), new RecipesRepository(new SqlConnection(connectionString)));
+});
 
 bool CanLog = builder.Configuration.GetSection("CanLog").Get<bool>();
 
@@ -47,6 +76,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Main}/{id?}");
 
 app.Run();

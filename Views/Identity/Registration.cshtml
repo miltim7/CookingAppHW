@@ -1,31 +1,28 @@
-@model LoginDto
+@model User
 
 @{
-    ViewData["Title"] = "Login";
-    string ReturnUrl = ViewData["returnUrl"] as string;
-
-    string Email = string.Empty;
-    string Password = string.Empty;
+    ViewData["Title"] = "Registration";
 }
 
 <button class="go-back">&#8249;</button>
 
-<div class="login-div">
+<div class="registration-div">
     <p class="error">@ViewData["ErrorMessage"]</p>
+    <div class="asp-validation" asp-validation-summary="All"></div> 
 
-    <form asp-asp-controller="Identity" asp-action="Login" method="post" class="login-form">
-        <p class="form-name">Login</p>
+    <form asp-controller="Identity" asp-action="Registration" method="post" class="registration-form">
+        <p class="form-name">Registration</p>
 
-        <input type="hidden" asp-for="@ReturnUrl">
+        <input asp-for="UserName" type="text" placeholder="Username">
+        <span asp-validation-for="UserName"></span>  
 
-        <input asp-for="Email" id="email" type="email" placeholder="Email">
+        <input asp-for="Email" type="email" placeholder="Email">
         <span asp-validation-for="Email"></span>
 
-        <input asp-for="Password" id="password" type="password" placeholder="Password">
+        <input asp-for="Password" type="password" placeholder="Password">
         <span asp-validation-for="Password"></span>
 
         <button id="submit" type="submit">Submit</button>
-        <p class="message">Not registered? <a class="login-create-link" href="/Identity/Registration">Create an account</a></p>
     </form>
 </div>
 
@@ -34,14 +31,25 @@
 }
 
 <style>
-    .login-div {
+    .registration-form p {
+        font-weight: bold;
+        color: #d6bf29;
+        font-size: 18px;
+    }
+
+    .asp-validation ul {
+        color: red;
+        list-style-type: none;
+    }
+
+    .registration-div {
         display: flex;
         flex-direction: column;
         align-items: center;
         margin-top: 200px;
     }
 
-    .login-form {
+    .registration-form {
         position: relative;
         background: #ffffff;
         max-width: 360px;
@@ -51,7 +59,7 @@
         border-radius: 15px;
     }
 
-    .login-form input {
+    .registration-form input {
         outline: 0;
         background: #f2f2f2;
         width: 100%;
@@ -63,7 +71,7 @@
         border-radius: 15px;
     }
 
-    .login-form button {
+    .registration-form button {
         text-transform: uppercase;
         outline: 0;
         background: #3324be;
@@ -78,19 +86,19 @@
         cursor: pointer;
     }
 
-    .login-form button:hover,
-    .login-form button:active,
-    .login-form button:focus {
+    .registration-form button:hover,
+    .registration-form button:active,
+    .registration-form button:focus {
         background: #2957d6;
     }
 
-    .login-form .message {
+    .registration-form .message {
         margin: 15px 0 0;
         color: #b3b3b3;
         font-size: 12px;
     }
 
-    .login-form .message a {
+    .registration-form .message a {
         color: #3324be;
         text-decoration: none;
     }

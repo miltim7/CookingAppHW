@@ -1,20 +1,28 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using CookingAppHW.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CookingAppHW.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly UserManager<IdentityUser> userManager;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(UserManager<IdentityUser> userManager)
     {
-        _logger = logger;
+        this.userManager = userManager;
     }
 
-    public IActionResult Index()
+    public IActionResult Main()
     {
+        return View();
+    }
+
+    [Authorize]
+    public async Task<IActionResult> Index() 
+    {
+        var user = await userManager.GetUserAsync(User);
+        ViewData["Username"] = user?.UserName;
         return View();
     }
 }
