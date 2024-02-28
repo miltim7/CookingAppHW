@@ -1,202 +1,157 @@
-body {
-  background-color: #323437;
-  overflow-x: hidden;
-}
+@import url(https://fonts.googleapis.com/css?family=Poppins:300);
 
-form {
-  padding-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-form input,
-form textarea {
-  padding: 20px;
-  display: flex;
-  width: 90vw;
-  border-radius: 20px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
   border: none;
-  margin-bottom: 15px;
-  background-color: #43464d;
-  color: #ffffff;
+  outline: none;
+  scroll-behavior: smooth;
+  font-family: 'Poppins', sans-serif;
 }
 
-#submit {
-  display: block;
-  text-align: center;
-  width: 90vw;
-  padding: 17px;
-  border-radius: 15px;
-  border: none;
-  background-color: #477353;
-  color: #ffffff;
-}
-
-#submit:hover {
-  background-color: #4b8c5d;
-  transition: 0.4s ease;
-}
-
-ul {
-  padding-top: 1rem;
-  list-style: none;
-}
-
-li {
-  color: #ffffff;
-}
-
-ul {
-  border-radius: 10px;
-}
-
-ul div {
-  padding: 30px;
-  background-color: #43464d;
-  margin-right: 40px;
-}
-
-span {
-  color: #4b8c5d;
-  font-weight: bold;
-}
-
-.title {
-  margin-top: 30px;
-  background-color: #404040;
-  border-radius: 10px 10px 0 0;
-  font-size: 25px;
-}
-
-p {
-  padding-top: 5rem;
-  color: #ffffff;
-}
-
-h1, h2 {
-  color: #ffffff;
-  padding: 100px;
-}
-
-.go-back,
-.cancel-change-password {
-  background-color: #565656;
+.go-back {
+  background-color: #c9baba;
   color: #ffffff;
   text-decoration: none;
   display: inline-block;
-  padding: 4rem 16px 0 16px;
-  border-radius: 0 0 5px 0;
+  padding: 6rem 16px 0 16px;
+  border-radius: 0 0 4px 0;
   font-size: 2rem;
   border: none;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
-.go-back:hover,
-.cancel-change-password:hover {
+.go-back:hover {
   background-color: #cfcfcf;
-  color: #000000;
+  color: #a1a1a1;
   transition: 0.4s ease;
 }
 
-.text-center {
-  font-family: 'Poppins', sans-serif;
-}
-
-.price {
-  margin-bottom: 25px;
-  font-size: 20px;
-  font-family: 'Poppins', sans-serif;
-}
-
-.interpretation {
-  margin: 50px;
-  font-size: 25px;
-  font-family: 'Poppins', sans-serif;
-  margin-top: -100px;
-}
-
-.logout {
-  text-decoration: none;
-  margin: 0 0.7vw;
-  color: #b8b8b8;
-}
-
-.logout:hover {
-  color: #eeeeee;
-  transition: 0.2s ease;
-}
-
-.profile {
-  color: rgb(55, 144, 89);
-}
-
-.profile:hover {
-  color: rgb(49, 114, 75);
-  transition: 0.1s ease;
-}
-
-#changePasswordButton {
-  align-self: flex-start;
-  margin: 10px 0 10px 80px;
-  padding: 10px 20px 10px 20px;
-  background-color: transparent;
-  border: none;
-  background-color: #1969bf;
-  color: #b2b2bb;
-  border-radius: 10px;
-  font-size: 13px;
-  font-family: 'Poppins', sans-serif;
-}
-
-#changePasswordButton:hover {
-  background-color: rgb(45, 63, 161);
-  transition: 0.2s ease;
-}
-
-label {
-  color: #a7afc1;
-  font-size: 16px;
-  font-family: 'Poppins', sans-serif; 
+body {
+  box-sizing: border-box;
 }
 
 .error {
-  margin-bottom: -20px ;
-  margin-left: 80px;
-  margin-top: -80px;
-  color: #d11515;
-  align-items: center ;
+  color: red;
 }
 
-.create-recipe {
+.form-name {
+  font-weight: bold;
+  color: #d6bf29;
+  font-size: 18px;
+}
+
+.logout {
+  
+}
+
+.recipe-ul {
+  margin-top: 100px;
+  margin-bottom: 5rem;
+  text-decoration: none;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 80px;
+  padding: 20px;
+}
+
+.delete {
+  cursor: pointer;
+  color: red;
+}
+
+.delete:hover {
+  color: rgb(190, 35, 35);
+  transition: 0.4s ease;
+}
+
+.edit {
+  cursor: pointer;
+  color: #ffe202;
+}
+
+.edit:hover {
+  color: #bfac1b;
+  transition: 0.4s ease;
+}
+
+.recipe-div {
   display: flex;
-  margin: 20px 0 -20px 30px;
-  border: none;
-  background-color: #1e924aff;
-  color: #ffffff;
-  padding: 7px 20px;
-  font-size: 15px;
-  border-radius: 8px;
-  text-decoration: none;
-  width: 185px;
-  font-family: 'Poppins', sans-serif; 
+  flex-direction: column;
+  align-items: center;
+  max-width: 250px;
+  max-height: 300px;
 }
 
-.create-recipe:hover {
-  background-color: rgb(23, 87, 47);
-  color: #ffffff;
-  transition: 0.2s ease;
+.recipe-div img {
+  width: 250px;
+  height: 250px;
+  border-radius: 10px;
 }
 
-.details {
-  text-decoration: none;
-  background-color: #323437;
-  padding: 15px 10px 5px 10px;
-  border-radius: 4px;
-  color: #002af9;
+.recipe-image {
+  width: 250px;
+  max-height: 250px;
 }
 
-.details:hover {
-  background-color: #393939;
-  transition: 0.2s ease;
-  color: #006eff;
+.edit-form p {
+  font-weight: bold;
+  color: #d6bf29;
+  font-size: 18px;
+}
+
+.edit-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 200px;
+}
+
+.edit-form {
+  position: relative;
+  background: #ffffff;
+  max-width: 360px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  border-radius: 15px;
+}
+
+.edit-form input,
+.edit-form textarea {
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-radius: 15px;
+}
+
+.edit-form button {
+  text-transform: uppercase;
+  outline: 0;
+  background: #3324be;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  border-radius: 15px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+
+.edit-form button:hover,
+.edit-form button:active,
+.edit-form button:focus {
+  background: #2957d6;
 }

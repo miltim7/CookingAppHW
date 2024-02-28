@@ -1,18 +1,101 @@
+@model LoginDto
+
 @{
     ViewData["Title"] = "Login";
     string ReturnUrl = ViewData["returnUrl"] as string;
-    string Login = string.Empty;
+
+    string Email = string.Empty;
     string Password = string.Empty;
 }
 
 <button class="go-back">&#8249;</button>
 
-<p class="error">@ViewData["ErrorMessage"]</p>
+<div class="login-div">
+    <p class="error">@ViewData["ErrorMessage"]</p>
 
-<form asp-asp-controller="Identity" asp-action="Login" method="post"> 
-    <input type="hidden" asp-for="@ReturnUrl"> 
-    <input asp-for="@Login" id="login" type="text" placeholder="Login" onkeydown="handleEnterKeyPress(event, 'password')">
-    <input asp-for="@Password" id="password" type="password" placeholder="Password"  onkeydown="handleEnterKeyPress(event, 'submit')">
+    <form asp-asp-controller="Identity" asp-action="Login" method="post" class="login-form">
+        <p class="form-name">Login</p>
 
-    <button id="submit" type="submit">Login</button>
-</form>
+        <input type="hidden" asp-for="@ReturnUrl">
+
+        <input asp-for="Email" id="email" type="email" placeholder="Email">
+        <span asp-validation-for="Email"></span>
+
+        <input asp-for="Password" id="password" type="password" placeholder="Password">
+        <span asp-validation-for="Password"></span>
+
+        <button id="submit" type="submit">Submit</button>
+        <p class="message">Not registered? <a class="login-create-link" href="/Identity/Registration">Create an account</a></p>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+}
+
+<style>
+    .login-div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 200px;
+    }
+
+    .login-form {
+        position: relative;
+        background: #ffffff;
+        max-width: 360px;
+        padding: 45px;
+        text-align: center;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        border-radius: 15px;
+    }
+
+    .login-form input {
+        outline: 0;
+        background: #f2f2f2;
+        width: 100%;
+        border: 0;
+        margin: 0 0 15px;
+        padding: 15px;
+        box-sizing: border-box;
+        font-size: 14px;
+        border-radius: 15px;
+    }
+
+    .login-form button {
+        text-transform: uppercase;
+        outline: 0;
+        background: #3324be;
+        width: 100%;
+        border: 0;
+        padding: 15px;
+        color: #FFFFFF;
+        font-size: 14px;
+        border-radius: 15px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        cursor: pointer;
+    }
+
+    .login-form button:hover,
+    .login-form button:active,
+    .login-form button:focus {
+        background: #2957d6;
+    }
+
+    .login-form .message {
+        margin: 15px 0 0;
+        color: #b3b3b3;
+        font-size: 12px;
+    }
+
+    .login-form .message a {
+        color: #3324be;
+        text-decoration: none;
+    }
+
+    .message:hover a {
+        text-decoration: underline;
+    }
+</style>

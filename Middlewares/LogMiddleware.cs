@@ -1,24 +1,17 @@
 using System.Text;
-
+using Microsoft.AspNetCore.Identity;
 public class LogMiddleware : IMiddleware
 {
     private readonly ILogRepository repository;
-
-    public LogMiddleware(ILogRepository repository)
+    private readonly UserManager<IdentityUser> userManager;
+    public LogMiddleware(ILogRepository repository, UserManager<IdentityUser> userManager)
     {
         this.repository = repository;
+        this.userManager = userManager;
     }
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        int userId;
-        if (context.Request.Cookies["UserId"] is not null)
-        {
-            userId = int.Parse(context.Request.Cookies["UserId"]);
-        }
-        else
-        {
-            userId = 0;
-        }
+        var userId = userManager.GetUserId(context.User);
 
         var requestBody = await GetRequestBody(context);
 

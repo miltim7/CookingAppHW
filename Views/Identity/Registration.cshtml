@@ -1,20 +1,109 @@
+@model User
+
 @{
     ViewData["Title"] = "Registration";
-    
-    string Name = string.Empty;
-    string Surname = string.Empty;
-    string Login = string.Empty;
-    string Password = string.Empty;
 }
 
 <button class="go-back">&#8249;</button>
 
-<p class="error">@ViewData["ErrorMessage"]</p>
+<div class="registration-div">
+    <p class="error">@ViewData["ErrorMessage"]</p>
+    <div class="asp-validation" asp-validation-summary="All"></div> 
 
-<form asp-controller="Identity" asp-action="Registration" method="Post">
-    <input id="name" asp-for="@Name" type="text" placeholder="Name">
-    <input id="surname" asp-for="@Surname" type="text" placeholder="Surname">
-    <input id="login" asp-for="@Login" type="text" placeholder="Login">
-    <input id="password" asp-for="@Password" type="password" placeholder="Password">
-    <button id="submit" type="submit">Register</button>
-</form>
+    <form asp-controller="Identity" asp-action="Registration" method="post" class="registration-form">
+        <p class="form-name">Registration</p>
+
+        <input asp-for="UserName" type="text" placeholder="Username">
+        <span asp-validation-for="UserName"></span>  
+
+        <input asp-for="Email" type="email" placeholder="Email">
+        <span asp-validation-for="Email"></span>
+
+        <input asp-for="Password" type="password" placeholder="Password">
+        <span asp-validation-for="Password"></span>
+
+        <button id="submit" type="submit">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+}
+
+<style>
+    .registration-form p {
+        font-weight: bold;
+        color: #d6bf29;
+        font-size: 18px;
+    }
+
+    .asp-validation ul {
+        color: red;
+        list-style-type: none;
+    }
+
+    .registration-div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 200px;
+    }
+
+    .registration-form {
+        position: relative;
+        background: #ffffff;
+        max-width: 360px;
+        padding: 45px;
+        text-align: center;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        border-radius: 15px;
+    }
+
+    .registration-form input {
+        outline: 0;
+        background: #f2f2f2;
+        width: 100%;
+        border: 0;
+        margin: 0 0 15px;
+        padding: 15px;
+        box-sizing: border-box;
+        font-size: 14px;
+        border-radius: 15px;
+    }
+
+    .registration-form button {
+        text-transform: uppercase;
+        outline: 0;
+        background: #3324be;
+        width: 100%;
+        border: 0;
+        padding: 15px;
+        color: #FFFFFF;
+        font-size: 14px;
+        border-radius: 15px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        cursor: pointer;
+    }
+
+    .registration-form button:hover,
+    .registration-form button:active,
+    .registration-form button:focus {
+        background: #2957d6;
+    }
+
+    .registration-form .message {
+        margin: 15px 0 0;
+        color: #b3b3b3;
+        font-size: 12px;
+    }
+
+    .registration-form .message a {
+        color: #3324be;
+        text-decoration: none;
+    }
+
+    .message:hover a {
+        text-decoration: underline;
+    }
+</style>

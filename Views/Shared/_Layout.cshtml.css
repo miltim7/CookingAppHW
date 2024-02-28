@@ -1,42 +1,34 @@
 ﻿* {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  border: none;
-  outline: none;
-  scroll-behavior: smooth;
-  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  font-family: sans-serif;
+  letter-spacing: 1px;
+  font-weight: 300;
 }
 
-header {
-  min-height: 100px;
-  max-height: 100px;
+body {
+  overflow-x: hidden;
 }
 
 nav {
-  height: 4.5rem;
+  background-color: #ffffff;
+  height: 6.5rem;
   width: 100vw;
-  background-color: #131418;
+  padding-right: 5vw;
+  padding-left: 5vw;
   box-shadow: 0 3px 20px rgba(0, 0, 0, 0.2);
   display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
   z-index: 10;
 }
 
+/*Styling logo*/
 .logo {
   padding: 1vh 1vw;
   text-align: center;
-  display: flex;
-  align-items: center;
-}
-
-.logo span {
-  color: #01939c;
-  font-size: 26px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  margin-left: 20px;
 }
 
 .logo img {
@@ -44,6 +36,7 @@ nav {
   width: 5rem;
 }
 
+/*Styling Links*/
 .nav-links {
   display: flex;
   list-style: none;
@@ -57,12 +50,12 @@ nav {
 .nav-links li a {
   text-decoration: none;
   margin: 0 0.7vw;
-  color: #b8b8b8;
+  color: #434343;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
 }
 
 .nav-links li a:hover {
-  color: #eeeeee;
-  transition: 0.2s ease;
+  color: #000000;
 }
 
 .nav-links li {
@@ -73,6 +66,7 @@ nav {
   width: 80%;
 }
 
+/*Styling Buttons*/
 .login-button {
   background-color: transparent;
   border: 1.5px solid #f2f5f7;
@@ -81,8 +75,34 @@ nav {
   margin-left: 2vw;
   font-size: 1rem;
   cursor: pointer;
+
 }
 
+.login-button:hover {
+  color: #131418;
+  background-color: #f2f5f7;
+  border: 1.5px solid #f2f5f7;
+  transition: all ease-in-out 350ms;
+}
+
+.join-button {
+  color: #131418;
+  background-color: #61DAFB;
+  border: 1.5px solid #61DAFB;
+  border-radius: 2em;
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.join-button:hover {
+  color: #f2f5f7;
+  background-color: transparent;
+  border: 1.5px solid #f2f5f7;
+  transition: all ease-in-out 350ms;
+}
+
+/*Styling Hamburger Icon*/
 .hamburger div {
   width: 30px;
   height: 3px;
@@ -95,7 +115,7 @@ nav {
   display: none;
 }
 
-@media screen and (max-width: 800px) {
+/* @media screen and (max-width: 800px) {
   nav {
     position: fixed;
     z-index: 3;
@@ -167,7 +187,7 @@ nav {
   li.fade {
     opacity: 1;
   }
-}
+} */
 
 .toggle .line1 {
   transform: rotate(-45deg) translate(-5px, 6px);
@@ -180,4 +200,22 @@ nav {
 
 .toggle .line3 {
   transform: rotate(45deg) translate(-5px, -6px);
+}
+
+.main-div {
+  color: #131418;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  height: 100vh;
+  width: 85vw;
+  margin-left: 7vw;
+}
+
+.material-symbols-outlined {
+  color: #cdc82e;
+}
+
+.profile {
+  font-size: 50px;
 }

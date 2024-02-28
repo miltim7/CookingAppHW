@@ -1,26 +1,63 @@
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration.UserSecrets;
+using System.Net;
 
 public class IdentityController : Controller
 {
-    private readonly IUserService service;
+    private readonly UserManager<IdentityUser> userManager;
+    private readonly RoleManager<IdentityRole> roleManager;
+    private readonly SignInManager<IdentityUser> signInManager;
 
-    public IdentityController(IUserService service)
+    public IdentityController(
+        UserManager<IdentityUser> userManager,
+        RoleManager<IdentityRole> roleManager,
+        SignInManager<IdentityUser> signInManager)
     {
-        this.service = service;
+        this.userManager = userManager;
+        this.roleManager = roleManager;
+        this.signInManager = signInManager;
     }
 
     [HttpGet]
-    public IActionResult Login(string? returnUrl)
+    public IActionResult Login()
     {
-        ViewData["returnUrl"] = returnUrl;
         return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login([FromForm] LoginDto dto)
+    {
+        try
+        {
+            var user = await userManager.FindByEmailAsync(dto.Email);
+
+            if (user is null)
+            {
+                ViewData["ErrorMessage"] = $"There is no '{dto.Email}' Email!";
+                return View();
+            }
+
+            var result = await signInManager.PasswordSignInAsync(user, dto.Password, true, true);
+
+            if (result.Succeeded == false)
+            {
+                ViewData["ErrorMessage"] = "Wrong Password!";
+                return View();
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+        catch (ArgumentNullException ex)
+        {
+            HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            ViewData["ErrorMessage"] = ex.Message;
+            return View();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Something Went Wrong!");
+        }
     }
 
     [HttpGet]
@@ -30,107 +67,43 @@ public class IdentityController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login([FromForm] LoginDto loginDto)
+    public async Task<IActionResult> Registration([FromForm] UserDto dto)
     {
         try
         {
-            await service.LoginAsync(loginDto);
-
-            int userId = await service.GetIdByLogin(loginDto.Login);
-
-            HttpContext.Response.Cookies.Append("UserId", userId.ToString());
-
-            var claims = new List<Claim> {
-                new("creation_date_utc", DateTime.UtcNow.ToString()),
+            var newUser = new IdentityUser
+            {
+                UserName = dto.UserName,
+                Email = dto.Email
             };
 
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var result = await userManager.CreateAsync(newUser, dto.Password);
 
-            await HttpContext.SignInAsync(
-                scheme: CookieAuthenticationDefaults.AuthenticationScheme,
-                principal: new ClaimsPrincipal(claimsIdentity)
-            );
+            if (result.Succeeded == false)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
 
-            if (string.IsNullOrWhiteSpace(loginDto.ReturnUrl))
-                return RedirectToAction("Index", "Home");
+                return View("Registration");
+            }
 
-            return RedirectPermanent(loginDto.ReturnUrl);
+            if (dto.UserName == "Timur")
+            {
+                var role = new IdentityRole { Name = "Admin" };
+                await roleManager.CreateAsync(role);
+
+                await userManager.AddToRoleAsync(newUser, role.Name);
+            }
+
+            return RedirectToAction("Login", "Identity");
         }
-        catch (ArgumentException ex)
+        catch (ArgumentNullException ex)
         {
             HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             ViewData["ErrorMessage"] = ex.Message;
             return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "Something Went Wrong!");
-        }
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Registration(UserDto userDto)
-    {
-        try
-        {
-            await service.CreateAsync(userDto);
-        }
-        catch (ArgumentException ex)
-        {
-            HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            ViewData["ErrorMessage"] = ex.Message;
-            return View();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "Something Went Wrong!");
-        }
-
-        return RedirectToAction("Login", "Identity");
-    }
-
-    [HttpGet("[controller]/Profile")]
-    [Authorize]
-    public async Task<IActionResult> Profile()
-    {
-        return View(await service.GetUserById(int.Parse(HttpContext.Request.Cookies["UserId"])));
-    }
-
-    [HttpPost]
-    [Authorize]
-    public async Task<IActionResult> ChangeProfile([FromForm] User user)
-    {
-        try
-        {
-            user.Id = int.Parse(HttpContext.Request.Cookies["UserId"]);
-
-            await service.ChangeProfileAsync(user);
-
-            return RedirectToAction("Index", "Home");
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "Something Went Wrong!");
-        }
-    }
-
-    [HttpPost]
-    [Authorize]
-    public async Task<IActionResult> ChangePassword([FromForm] string newPassword)
-    {
-        try
-        {
-            await service.ChangePasswordAsync(newPassword, int.Parse(HttpContext.Request.Cookies["UserId"]));
-
-            return RedirectToAction("Profile", "Identity");
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
         }
         catch (Exception)
         {
@@ -140,10 +113,43 @@ public class IdentityController : Controller
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> LogOut()
+    public async Task<IActionResult> Logout()
     {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        await signInManager.SignOutAsync();
+        return base.RedirectToAction("Main", "Home");
+    }
 
-        return base.RedirectToAction("Login", "Identity");
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> Profile()
+    {
+        IdentityUser user = await userManager.GetUserAsync(User);
+
+        return View(user);
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> UploadAvatar(IFormFile file)
+    {
+        var newUserId = userManager.GetUserId(User);
+        var fileExtension = new FileInfo(file.FileName).Extension;
+
+        var filename = $"{newUserId}{fileExtension}";
+
+        var destinationAvatarPath = $"Assets/Avatars/{filename}";
+
+        using var fileStream = System.IO.File.Create(destinationAvatarPath);
+        await file.CopyToAsync(fileStream);
+
+        return base.RedirectToAction("Profile", "Identity");
+    }
+
+    public IActionResult Avatar(string filepath)
+    {
+        var fileExtension = new FileInfo(filepath).Extension;
+        var stream = System.IO.File.Open($"Avatars/{filepath}", FileMode.Open);
+
+        return base.File(stream, $"image/{fileExtension[1..]}", $"downloadfile{fileExtension}");
     }
 }

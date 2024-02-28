@@ -1,13 +1,9 @@
-﻿const hamburger = document.querySelector(".hamburger");
+﻿const goBack = document.querySelector('.go-back');
+const hamburger = document.querySelector(".hamburger");
 const navLinks = document.querySelector(".nav-links");
 const links = document.querySelectorAll(".nav-links li");
-const goBack = document.querySelector('.go-back');
 
-goBack.addEventListener('click', () => {
-    window.history.back();
-})
-
-hamburger.addEventListener('click', () => {
+hamburger.addEventListener('click', ()=>{
     navLinks.classList.toggle("open");
     links.forEach(link => {
         link.classList.toggle("fade");
@@ -15,6 +11,11 @@ hamburger.addEventListener('click', () => {
 
     hamburger.classList.toggle("toggle");
 });
+
+
+goBack.addEventListener('click', () => {
+    window.history.back();
+})
 
 function toggleChangePasswordForm() {
     var changePasswordForm = document.querySelector("#changePasswordForm");

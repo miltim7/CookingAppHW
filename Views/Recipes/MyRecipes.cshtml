@@ -14,17 +14,51 @@
 }
 else
 {
-    <ul>
+    <ul class="recipe-ul">
         @foreach (var recipe in Model)
         {
-            <div class="title">
-                <li>@recipe.Title</li>
-            </div>
-            <div>
-                <li class="price">@recipe.Price$</li>
-
-                <a href="/Recipes/Details?id=@recipe.Id" class="details"><i class="material-icons">info</i></a>
+            <div class="recipe-div">
+                <div class="recipe-image" class="mt-3"><img src="https://source.unsplash.com/featured/?@recipe.Title"
+                        class="img-fluid"></div>
+                <div class="title">
+                    <li>@recipe.Title</li>
+                </div>
+                <div>
+                    <li class="price">@recipe.Price$</li>
+                    <a href="/Recipes/Details?id=@recipe.Id" class="details"><i class="material-icons">info</i></a>
+                    <a href="/Recipes/MyEdit?id=@recipe.Id" class="edit"><i class="material-icons">edit</i></a>
+                    <a class="delete" onclick="deleteRecipe(@recipe.Id)"><i class="material-icons">delete</i></a>
+                </div>
             </div>
         }
     </ul>
 }
+
+<script>
+    async function deleteRecipe(id) {
+        await fetch('/Recipes/Delete/' + id,
+            {
+                method: 'DELETE'
+            }).then(() => location.reload());
+    }
+</script>
+
+<style>
+    .create-recipe {
+        position: absolute;
+        left: 80px;
+        top: 170px;
+        text-decoration: none;
+        background-color: #15c029;
+        color: #fff;
+        padding: 10px 30px;
+        font-size: 12px;
+        border-radius: 10px;
+    }
+
+    .create-recipe:hover {
+        color: #fff;
+        background-color: rgb(67, 118, 38);
+        transition: 0.3s ease;
+    }
+</style>
