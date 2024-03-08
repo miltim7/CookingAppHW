@@ -4,13 +4,11 @@
     ViewData["Title"] = "My Recipes";
 }
 
-<button class="go-back">&#8249;</button>
-
 <a href="/Recipes/Create" class="create-recipe">Create New Recipe</a>
 
 @if (!Model.Any())
 {
-    <h1>There is no recipes</h1>
+    <h1 style="margin-top: 300px;">There is no recipes!</h1>
 }
 else
 {
@@ -18,13 +16,15 @@ else
         @foreach (var recipe in Model)
         {
             <div class="recipe-div">
-                <div class="recipe-image" class="mt-3"><img src="https://source.unsplash.com/featured/?@recipe.Title"
-                        class="img-fluid"></div>
+                @{
+                    string image = $"{recipe.Id}.png";
+                }
+                <div class="recipe-image" class="mt-3"><img src="~/images/recipes/@image" class="img-fluid"></div>
                 <div class="title">
                     <li>@recipe.Title</li>
+                    <li class="price">@recipe.Price$</li>
                 </div>
                 <div>
-                    <li class="price">@recipe.Price$</li>
                     <a href="/Recipes/Details?id=@recipe.Id" class="details"><i class="material-icons">info</i></a>
                     <a href="/Recipes/MyEdit?id=@recipe.Id" class="edit"><i class="material-icons">edit</i></a>
                     <a class="delete" onclick="deleteRecipe(@recipe.Id)"><i class="material-icons">delete</i></a>

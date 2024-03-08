@@ -1,4 +1,5 @@
 using System.Data.SqlClient;
+using System.Net;
 using Dapper;
 using Microsoft.AspNetCore.Identity;
 
@@ -21,13 +22,49 @@ public class RecipeService : IRecipeService
 
         ArgumentException.ThrowIfNullOrEmpty(recipeDto.Category, nameof(recipeDto.Category));
 
+        var recipe = await SearchByTitleAsync(recipeDto.Title);
+
+        if (recipe != null)
+            throw new ArgumentException($"'{recipeDto.Title}' Title is already used");
+
         if (recipeDto.Price < 0)
             throw new ArgumentException("Price must be positive number or 0!");
 
         if (await repository.CreateAsync(recipeDto) == 0)
             throw new Exception();
+
+        await DownloadImage(recipeDto.Title);
     }
 
+    private async Task DownloadImage(string title)
+    {
+        string url = $"https://source.unsplash.com/featured/?{title}";
+        string path = "wwwroot/images/recipes";
+
+        int id = (await SearchByTitleAsync(title)).Id;
+
+        string fileName = $"{id}.png";
+
+        using WebClient client = new WebClient();
+
+        string headerValue = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3";
+
+        client.Headers.Add("user-agent", headerValue);
+
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
+
+        string localPath = Path.Combine(path, fileName);
+
+        client.DownloadFile(url, localPath);
+    }
+
+    private async Task<Recipe> SearchByTitleAsync(string title)
+    {
+        string query = "select * from Recipes where Title = @Title";
+        var recipe = await connection.QueryFirstOrDefaultAsync<Recipe>(query, new { Title = title });
+        return recipe;
+    }
     public async Task<IEnumerable<Recipe>> GetMyAsync(string id)
     {
         string query = "select * from Recipes where UserId = @Id";
@@ -79,14 +116,16 @@ public class RecipeService : IRecipeService
         string userIdQuery = "select UserId from Recipes where Id = @Id";
         string userId = await connection.QueryFirstOrDefaultAsync<string>(userIdQuery, new { Id = id });
 
-        if(userId is null) {
+        if (userId is null)
+        {
             throw new ArgumentException($"There is no recipe with id: {id}");
         }
 
         string userQuery = "select * from AspNetUsers where Id = @Id";
         var user = await connection.QueryFirstOrDefaultAsync<IdentityUser>(userQuery, new { Id = userId });
 
-        if (user is null) {
+        if (user is null)
+        {
             throw new ArgumentException($"There is no user who has recipe with id: {userId}");
         }
 

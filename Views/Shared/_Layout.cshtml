@@ -29,7 +29,7 @@
             </div>
             <ul class="nav-links">
                 <li>
-                    <div style="display: flex; flex-direction: row; ">
+                    <div style="display: flex; flex-direction: row; ">  
                         <a style="font-weight: bold; color: #d06421; font-size: 30px;" href="/Home/Main">Cooking</a>
                         <a href="/Home/Main" style="margin-left: -6px;"><span style="font-size: 45px;"
                                 class="material-symbols-outlined">restaurant</span></a>
@@ -57,7 +57,8 @@
                 @if (isAuthenticated)
                 {
                     <li><a href="/Identity/Profile">Profile</a></li>
-                    <li><a style="text-decoration: none; margin: 0 0.7vw;color: #434343;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif" asp-area="" asp-controller="Identity" asp-action="Logout">LogOut</a></li>
+                    <li><a style="text-decoration: none; margin: 0 0.7vw;color: #434343;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif"
+                            asp-area="" asp-controller="Identity" asp-action="Logout">LogOut</a></li>
                 }
             </ul>
         </nav>

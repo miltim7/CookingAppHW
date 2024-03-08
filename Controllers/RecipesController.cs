@@ -25,6 +25,7 @@ public class RecipesController : Controller
     public async Task<IActionResult> Recipes()
     {
         var recipes = await repository.GetAllAsync();
+        
         return View(recipes);
     }
 
@@ -131,7 +132,7 @@ public class RecipesController : Controller
     {
         if (!this.User.IsInRole("Admin"))
             return StatusCode(403, "Have not access!");
-            
+
         try
         {
             await service.Edit(recipe);
@@ -173,7 +174,8 @@ public class RecipesController : Controller
     [HttpPut]
     [Authorize]
     [Consumes("application/json")]
-    public async Task<IActionResult> MyEdit([FromBody] Recipe recipe) {
+    public async Task<IActionResult> MyEdit([FromBody] Recipe recipe)
+    {
         try
         {
             await service.Edit(recipe);

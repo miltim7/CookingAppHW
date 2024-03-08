@@ -1,44 +1,8 @@
-@* @model User
-
-@{
-ViewData["Title"] = "Profile";
-}
-
-<button class="cancel-change-password" style="display: none;">&#8249;</button>
-
-<p class="error">@ViewData["ErrorMessage"]</p>
-
-<form id="profileForm" asp-controller="Identity" asp-action="ChangeProfile">
-<label for="name">Name</label>
-<input id="name" asp-for="@Model.UserName" type="text" placeholder="Name">
-
-<label for="email">Email</label>
-<input id="email" asp-for="@Model.Email" type="text" placeholder="Email">
-
-<button id="submit" type="submit">Save Changes</button>
-</form>
-
-<button id="changePasswordButton" onclick="toggleChangePasswordForm()">Change Password</button>
-
-<form id="changePasswordForm" style="display: none;" asp-controller="Identity" asp-action="ChangePassword"
-method="post">
-<input placeholder="Old Password" type="password" id="currentPassword" name="currentPassword">
-
-<input placeholder="New Password" type="password" id="newPassword" name="newPassword">
-
-<input asp-for="@Model.Password" placeholder="Confirm New Password" type="password" id="confirmNewPassword"
-name="confirmNewPassword">
-
-<button onclick="return changePassword('@Model.Password')" type="submit" id="submit">Change Password</button>
-</form> *@
-
 @model IdentityUser
 
 @{
     ViewData["Title"] = "Profile";
 }
-
-<button class="go-back">&#8249;</button>
 
 <div class="profile-div">
     <form class="profile-form">

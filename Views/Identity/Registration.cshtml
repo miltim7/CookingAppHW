@@ -4,7 +4,6 @@
     ViewData["Title"] = "Registration";
 }
 
-<button class="go-back">&#8249;</button>
 
 <div class="registration-div">
     <p class="error">@ViewData["ErrorMessage"]</p>
@@ -13,13 +12,13 @@
     <form asp-controller="Identity" asp-action="Registration" method="post" class="registration-form">
         <p class="form-name">Registration</p>
 
-        <input asp-for="UserName" type="text" placeholder="Username">
-        <span asp-validation-for="UserName"></span>  
-
-        <input asp-for="Email" type="email" placeholder="Email">
+        <input id="email" asp-for="Email" type="email" placeholder="yourname@example.com">
         <span asp-validation-for="Email"></span>
 
-        <input asp-for="Password" type="password" placeholder="Password">
+        <input asp-for="UserName" type="text" placeholder="Enter your username">
+        <span asp-validation-for="UserName"></span>  
+
+        <input asp-for="Password" type="password" placeholder="Enter your password">
         <span asp-validation-for="Password"></span>
 
         <button id="submit" type="submit">Submit</button>
@@ -31,6 +30,12 @@
 }
 
 <style>
+    .registration-form label {
+        font-weight: 400;
+        font-size: 15px;
+        margin: 10px;
+    }
+
     .registration-form p {
         font-weight: bold;
         color: #d6bf29;

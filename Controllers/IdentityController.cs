@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -71,6 +72,11 @@ public class IdentityController : Controller
     {
         try
         {
+            var user = await userManager.FindByEmailAsync(dto.Email);
+
+            if (user != null)
+                throw new ArgumentException($"User with email: {dto.Email} is already exist!");
+
             var newUser = new IdentityUser
             {
                 UserName = dto.UserName,
@@ -100,6 +106,12 @@ public class IdentityController : Controller
             return RedirectToAction("Login", "Identity");
         }
         catch (ArgumentNullException ex)
+        {
+            HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            ViewData["ErrorMessage"] = ex.Message;
+            return View();
+        }
+        catch (ArgumentException ex)
         {
             HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             ViewData["ErrorMessage"] = ex.Message;

@@ -7,9 +7,8 @@
 <div class="edit-div">
     <p class="error">@ViewData["ErrorMessage"]</p>
 
-    <p class="form-name">Edit Recipe</p>
     <form onsubmit="editRecipeSubmit(Id)" class="edit-form">
-
+        <p class="form-name">Edit Recipe</p>
         <input type="number" asp-for="Id" hidden>
         <input type="text" asp-for="Title" placeholder="Title">
         <input type="text" asp-for="Description" placeholder="Description">
