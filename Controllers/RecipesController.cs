@@ -72,6 +72,7 @@ public class RecipesController : Controller
     }
 
     [HttpGet("[controller]/Details")]
+    [Authorize]
     public async Task<IActionResult> Details(int id)
     {
         try
@@ -93,6 +94,7 @@ public class RecipesController : Controller
     }
 
     [HttpDelete]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         try
@@ -107,13 +109,14 @@ public class RecipesController : Controller
             ViewData["ErrorMessage"] = ex.Message;
             return RedirectToAction("GetAll", "Recipes");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return RedirectToAction("GetAll", "Recipes");
         }
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> Edit(int id)
     {
         if (!this.User.IsInRole("Admin"))
@@ -126,9 +129,9 @@ public class RecipesController : Controller
         return View(recipe);
     }
 
-    [HttpPut]
-    [Consumes("application/json")]
-    public async Task<IActionResult> Edit([FromBody] Recipe recipe)
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> Edit([FromForm] Recipe recipe)
     {
         if (!this.User.IsInRole("Admin"))
             return StatusCode(403, "Have not access!");
@@ -171,10 +174,9 @@ public class RecipesController : Controller
         }
     }
 
-    [HttpPut]
+    [HttpPost]
     [Authorize]
-    [Consumes("application/json")]
-    public async Task<IActionResult> MyEdit([FromBody] Recipe recipe)
+    public async Task<IActionResult> MyEdit([FromForm] Recipe recipe)
     {
         try
         {

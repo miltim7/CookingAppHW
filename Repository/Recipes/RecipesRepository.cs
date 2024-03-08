@@ -32,7 +32,6 @@ public class RecipesRepository : IRecipesRepository
 
     public async Task<int> DeleteAsync(int id)
     {
-        System.Console.WriteLine(id);
         string query = "delete from Recipes where Id = @Id";
 
         return await connection.ExecuteAsync(query, new { Id = id });

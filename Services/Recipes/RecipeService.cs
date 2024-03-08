@@ -83,6 +83,8 @@ public class RecipeService : IRecipeService
         {
             throw new Exception("There is no recipe with that Id!");
         }
+
+        DeleteImage(id);
     }
 
     public async Task<Recipe> GetById(int id)
@@ -109,6 +111,26 @@ public class RecipeService : IRecipeService
         {
             throw new Exception();
         }
+
+        await UpdateImage(recipe);
+    }
+
+    private async Task UpdateImage(Recipe recipe)
+    {
+        DeleteImage(recipe.Id);      
+
+        await DownloadImage(recipe.Title);
+    }
+
+    private void DeleteImage(int id)
+    {
+        string fileNameToDelete = $"{id}.png";
+
+        string path = "wwwroot/images/recipes";
+
+        string filePath = Path.Combine(path, fileNameToDelete);
+
+        File.Delete(filePath);
     }
 
     public async Task<IdentityUser> GetUserByRecipeIdAsync(int id)
