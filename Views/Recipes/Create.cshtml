@@ -20,7 +20,7 @@
         <input id="price" asp-for="@Price" type="number" placeholder="Price">
         <input type="text" asp-for="@UserId" hidden>
 
-        <button id="submit" type="submit">Create</button>
+        <button id="submit" type="submit">Submit</button>
     </form>
 </div>
 
@@ -80,5 +80,6 @@
     .create-form button:active,
     .create-form button:focus {
         background: #2957d6;
+        transition: 0.3s ease;
     }
 </style>

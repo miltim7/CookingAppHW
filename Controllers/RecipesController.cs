@@ -195,4 +195,14 @@ public class RecipesController : Controller
             return StatusCode(500, "Something went wrong!");
         }
     }
+
+    [HttpGet]
+    [Authorize]    
+    public async Task<IActionResult> Requests()
+    {
+        if (!this.User.IsInRole("Admin"))
+            return StatusCode(403, "Have not access!");
+
+        return View();
+    }
 }

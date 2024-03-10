@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Requests";
+}
+
+<div class="requests-grid-container">
+    <div>Id</div>
+    <div>Title</div>
+    <div>Description</div>
+    <div>Category</div>
+    <div>Price</div>
+    <div>Approvals</div>
+</div>
+
+<div class="requests-items">
+    <p>1</p>
+    <p>Title</p>
+    <p>Description</p>
+    <p>Category</p>
+    <p>Price</p>
+    <div>
+        <button class="truck-button">
+            <span class="default">Approve</span>
+            <span class="success">
+                Approved!
+                <svg viewbox="0 0 12 10">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                </svg>
+            </span>
+            <div class="truck">
+                <div class="wheel"></div>
+                <div class="back"></div>
+                <div class="front"></div>
+                <div class="box"></div>
+            </div>
+        </button>
+        <button class="close-button" style="display: none;"><i class="material-icons">close</i></button>
+    </div>
+</div>
+
+<style>
+    .requests-grid-container {
+        position: absolute;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        width: 99%;
+        margin-top: 105px;
+    }
+
+    .requests-grid-container div {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .requests-items {
+        position: absolute;
+        z-index: 100;
+        width: 100%;
+        height: 90px;
+        padding: 15px 15px 0 0;
+        margin-left: 15px;
+        margin-top: 180px;
+        text-align: center;
+        align-items: center;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        background-color: #cddcdd;
+    }
+
+    .requests-items div {
+        display: flex;
+    }
+
+    .close-button {
+        margin-left: 15px;
+        margin-bottom: 8px;
+        background-color: transparent;
+        color: #0e784c;
+    }
+
+    .close-button:hover {
+        color: #1d4836;
+    }
+</style>

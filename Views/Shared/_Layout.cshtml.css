@@ -20,7 +20,7 @@ header {
 }
 
 nav {
-  background-color: var(--nav-background-color);
+  background-color: #ffffff;
   height: 6.5rem;
   width: 100vw;
   padding-right: 5vw;

@@ -139,29 +139,4 @@ public class IdentityController : Controller
 
         return View(user);
     }
-
-    [HttpPost]
-    [Authorize]
-    public async Task<IActionResult> UploadAvatar(IFormFile file)
-    {
-        var newUserId = userManager.GetUserId(User);
-        var fileExtension = new FileInfo(file.FileName).Extension;
-
-        var filename = $"{newUserId}{fileExtension}";
-
-        var destinationAvatarPath = $"Assets/Avatars/{filename}";
-
-        using var fileStream = System.IO.File.Create(destinationAvatarPath);
-        await file.CopyToAsync(fileStream);
-
-        return base.RedirectToAction("Profile", "Identity");
-    }
-
-    public IActionResult Avatar(string filepath)
-    {
-        var fileExtension = new FileInfo(filepath).Extension;
-        var stream = System.IO.File.Open($"Avatars/{filepath}", FileMode.Open);
-
-        return base.File(stream, $"image/{fileExtension[1..]}", $"downloadfile{fileExtension}");
-    }
 }
