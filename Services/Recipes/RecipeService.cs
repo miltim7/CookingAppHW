@@ -107,17 +107,23 @@ public class RecipeService : IRecipeService
             throw new ArgumentException("Price can't be negative nubmer!");
         }
 
+        if (await SearchByTitleAsync(recipe.Title) is not null)
+        {
+            throw new ArgumentException($"{recipe.Title} title is already taken!");
+        }
+
         if (await repository.UpdateAsync(recipe) == 0)
         {
             throw new Exception();
         }
+
 
         await UpdateImage(recipe);
     }
 
     private async Task UpdateImage(Recipe recipe)
     {
-        DeleteImage(recipe.Id);      
+        DeleteImage(recipe.Id);
 
         await DownloadImage(recipe.Title);
     }

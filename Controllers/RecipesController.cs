@@ -146,7 +146,7 @@ public class RecipesController : Controller
         {
             HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             ViewData["ErrorMessage"] = ex.Message;
-            return RedirectPermanent($"Recipes/Edit?id={recipe.Id}");
+            return View();
         }
         catch (Exception)
         {
@@ -188,7 +188,7 @@ public class RecipesController : Controller
         {
             HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             ViewData["ErrorMessage"] = ex.Message;
-            return RedirectPermanent($"Recipes/Edit?id={recipe.Id}");
+            return View();
         }
         catch (Exception)
         {
