@@ -25,7 +25,7 @@ public class RecipesController : Controller
     public async Task<IActionResult> Recipes()
     {
         var recipes = await repository.GetAllAsync();
-        
+
         return View(recipes);
     }
 
@@ -57,7 +57,9 @@ public class RecipesController : Controller
 
             HttpContext.Response.StatusCode = (int)HttpStatusCode.Created;
 
-            return RedirectToAction("MyRecipes", "Recipes");
+            var recipes = await repository.GetAllAsync();
+
+            return RedirectToAction("Requests", "Bucket", InstrumentRecipe.ChangeToDto(recipes));
         }
         catch (ArgumentException ex)
         {
@@ -194,15 +196,5 @@ public class RecipesController : Controller
         {
             return StatusCode(500, "Something went wrong!");
         }
-    }
-
-    [HttpGet]
-    [Authorize]    
-    public async Task<IActionResult> Requests()
-    {
-        if (!this.User.IsInRole("Admin"))
-            return StatusCode(403, "Have not access!");
-
-        return View();
     }
 }

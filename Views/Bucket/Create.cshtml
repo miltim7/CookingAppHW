@@ -11,7 +11,7 @@
 <div class="create-div">
     <p class="error">@ViewData["ErrorMessage"]</p>
 
-    <form class="create-form" asp-controller="Recipes" asp-action="Create" method="post">
+    <form class="create-form" asp-controller="Bucket" asp-action="Create" method="post">
         <p>Create Recipe</p>
 
         <input id="title" asp-for="@Title" type="text" placeholder="Title" />
@@ -20,6 +20,6 @@
         <input id="price" asp-for="@Price" type="number" placeholder="Price">
         <input id="userId" type="text" asp-for="@UserId" hidden>
 
-        <button id="submit" type="submit">Create</button>
+        <button id="submit" type="submit">SEND TO VARIFICATION</button>
     </form>
 </div>

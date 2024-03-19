@@ -429,9 +429,113 @@ body {
 }
 
 .requests-items {
-  transition: transform 0.4s ease-in-out;
+  transition: transform 0.5s ease-in-out;
 }
 
 .requests-items.hidden {
   display: none;
+}
+
+.requests-grid-container {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: 99%;
+  margin-top: 105px;
+  padding-bottom: 100px;
+}
+
+.requests-grid-container div {
+  padding: 20px;
+  text-align: center;
+}
+
+.requests-items {
+  place-items: center;
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: 90px;
+  padding: 15px 15px 0 0;
+  margin-left: 15px;
+  margin-top: 180px;
+  text-align: center;
+  align-items: center;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: #cddcdd;
+}
+
+.requests-items div {
+  display: flex;
+}
+
+.close-button {
+  margin-left: 15px;
+  margin-bottom: 8px;
+  background-color: transparent;
+  color: #0e784c;
+}
+
+.close-button:hover {
+  color: #1d4836;
+}
+
+.create-form p {
+  font-weight: bold;
+  color: #d6bf29;
+  font-size: 18px;
+}
+
+.create-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 120px;
+}
+
+.create-form {
+  position: relative;
+  background: #ffffff;
+  max-width: 360px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  border-radius: 15px;
+}
+
+.create-form input,
+.create-form textarea {
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-radius: 15px;
+}
+
+.create-form button {
+  text-transform: uppercase;
+  outline: 0;
+  background: #3324be;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  border-radius: 15px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+
+.create-form button:hover,
+.create-form button:active,
+.create-form button:focus {
+  background: #2957d6;
+  transition: 0.3s ease;
 }

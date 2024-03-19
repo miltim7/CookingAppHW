@@ -1,5 +1,10 @@
 ﻿var button = document.querySelector(".truck-button");
-button.addEventListener("click", function () {
+
+async function truckClicked(id) {
+    await fetch('/Bucket/Delete/' + id,
+        {
+            method: 'DELETE'
+        });
     button.classList.add("clicked");
 
     setTimeout(function () {
@@ -8,20 +13,18 @@ button.addEventListener("click", function () {
     }, 3800);
 
     setTimeout(function () {
-        var closeButton = document.querySelector('.close-button');
-        closeButton.style.display = 'block';
+        document.querySelector('.close-button').click();
 
-        closeButton.addEventListener('click', () => {
-            var item = document.querySelector('.requests-items');
+        var item = document.querySelector('.requests-items');
 
-            item.style.transform = "translateX(-100%)";
+        item.style.transform = "translateX(-100%)";
 
-            setTimeout(function () {
-                item.classList.add("hidden");
-            }, 400);
-        })
-    }, 4800);
-});
+        setTimeout(function () {
+            item.classList.add("hidden");
+        }, 600);
+    }, 5000);
+
+}
 
 document.querySelectorAll('.truck-button').forEach(button => {
     button.addEventListener('click', e => {

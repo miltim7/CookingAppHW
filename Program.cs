@@ -32,14 +32,21 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<MyDbContext>();
 
+
 builder.Services.AddScoped<IRecipesRepository>(p =>
 {
     return new RecipesRepository(new SqlConnection(connectionString));
 });
 
-
 builder.Services.AddScoped<IRecipeService>(p => {
     return new RecipeService(new SqlConnection(connectionString), new RecipesRepository(new SqlConnection(connectionString)));
+});
+
+builder.Services.AddScoped<IBucketRepository>(p => {
+    return new BucketRepository(new SqlConnection(connectionString));
+});
+builder.Services.AddScoped<IBucketService>(p => {
+    return new BucketService(new BucketRepository(new SqlConnection(connectionString)));
 });
 
 bool CanLog = builder.Configuration.GetSection("CanLog").Get<bool>();

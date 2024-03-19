@@ -3,7 +3,7 @@ create database CookingAppDB;
 create table Recipes 
 (
     [Id] int primary key identity,
-    [Title] nvarchar(50) unique not null,
+    [Title] nvarchar(50) not null,
     [Description] nvarchar(max) not null,
     [Category] nvarchar(50) not null,
     [Price] int not null,

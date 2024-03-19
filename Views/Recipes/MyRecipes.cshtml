@@ -2,13 +2,23 @@
 
 @{
     ViewData["Title"] = "My Recipes";
+    bool isAdmin = this.User.IsInRole("Admin");
 }
 
-<a href="/Recipes/Create" class="create-recipe">Create New Recipe</a>
+@if (isAdmin)
+{
+    <a href="/Recipes/Create" class="create-recipe">Create New Recipe</a>
+}
+else
+{
+    <a href="/Bucket/Create" class="create-recipe">Create New Recipe</a>
+}
 
 @if (!Model.Any())
 {
-    <h1 style="margin-top: 300px;">There is no recipes!</h1>
+    <div class="text-center">
+        <h1 style="margin-top: 300px; font-weight: 100;">There is no your recipes!</h1>
+    </div>
 }
 else
 {

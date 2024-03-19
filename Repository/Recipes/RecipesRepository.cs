@@ -18,9 +18,12 @@ public class RecipesRepository : IRecipesRepository
     public async Task<int> CreateAsync(RecipeDto recipeDto)
     {
         string query = @"insert into Recipes ([Title], [Description], [Category], [Price], [UserId])
-                         values(@Title, @Description, @Category, @Price, @UserId)";
+                        values(@Title, @Description, @Category, @Price, @UserId);
+                        select CAST(SCOPE_IDENTITY() as int)";
 
-        return await connection.ExecuteAsync(query, recipeDto);
+        int id = await connection.QueryFirstOrDefaultAsync<int>(query, recipeDto);
+
+        return id;
     }
 
     public async Task<Recipe> GetByIdAsync(int id)

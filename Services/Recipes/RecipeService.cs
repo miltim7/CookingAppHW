@@ -22,26 +22,22 @@ public class RecipeService : IRecipeService
 
         ArgumentException.ThrowIfNullOrEmpty(recipeDto.Category, nameof(recipeDto.Category));
 
-        var recipe = await SearchByTitleAsync(recipeDto.Title);
-
-        if (recipe != null)
-            throw new ArgumentException($"'{recipeDto.Title}' Title is already used");
-
         if (recipeDto.Price < 0)
             throw new ArgumentException("Price must be positive number or 0!");
 
-        if (await repository.CreateAsync(recipeDto) == 0)
+        int id = await repository.CreateAsync(recipeDto);
+
+        if (id < 1)
             throw new Exception();
 
-        await DownloadImage(recipeDto.Title);
+        DownloadImage(id, recipeDto.Title);
     }
 
-    private async Task DownloadImage(string title)
+    private void DownloadImage(int id, string title)
     {
         string url = $"https://source.unsplash.com/featured/?{title}";
+        
         string path = "wwwroot/images/recipes";
-
-        int id = (await SearchByTitleAsync(title)).Id;
 
         string fileName = $"{id}.png";
 
@@ -59,12 +55,6 @@ public class RecipeService : IRecipeService
         client.DownloadFile(url, localPath);
     }
 
-    private async Task<Recipe> SearchByTitleAsync(string title)
-    {
-        string query = "select * from Recipes where Title = @Title";
-        var recipe = await connection.QueryFirstOrDefaultAsync<Recipe>(query, new { Title = title });
-        return recipe;
-    }
     public async Task<IEnumerable<Recipe>> GetMyAsync(string id)
     {
         string query = "select * from Recipes where UserId = @Id";
@@ -107,16 +97,10 @@ public class RecipeService : IRecipeService
             throw new ArgumentException("Price can't be negative nubmer!");
         }
 
-        if (await SearchByTitleAsync(recipe.Title) is not null)
-        {
-            throw new ArgumentException($"{recipe.Title} title is already taken!");
-        }
-
         if (await repository.UpdateAsync(recipe) == 0)
         {
             throw new Exception();
         }
-
 
         await UpdateImage(recipe);
     }
@@ -125,7 +109,7 @@ public class RecipeService : IRecipeService
     {
         DeleteImage(recipe.Id);
 
-        await DownloadImage(recipe.Title);
+        DownloadImage(recipe.Id, recipe.Title);
     }
 
     private void DeleteImage(int id)
