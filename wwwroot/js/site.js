@@ -1,6 +1,12 @@
-﻿var button = document.querySelector(".truck-button");
-
+﻿
 async function truckClicked(id) {
+    var button = document.querySelector(`.truck${id}`);
+
+    var buttons = document.querySelectorAll('.truck-button');
+    buttons.forEach(button => {
+        button.disabled = true;
+    })
+
     await fetch('/Bucket/Delete/' + id,
         {
             method: 'DELETE'
@@ -9,21 +15,23 @@ async function truckClicked(id) {
 
     setTimeout(function () {
         button.classList.add("normal");
-        button.disabled = true;
     }, 3800);
 
     setTimeout(function () {
-        document.querySelector('.close-button').click();
+        document.querySelector(`.close${id}`).click();
 
-        var item = document.querySelector('.requests-items');
+        var item = document.querySelector(`.form${id}`);
 
         item.style.transform = "translateX(-100%)";
 
         setTimeout(function () {
             item.classList.add("hidden");
+
+            buttons.forEach(button => {
+                button.disabled = false;
+            })
         }, 600);
     }, 5000);
-
 }
 
 document.querySelectorAll('.truck-button').forEach(button => {
