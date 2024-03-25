@@ -35,7 +35,7 @@ public class RecipeService : IRecipeService
 
     private void DownloadImage(int id, string title)
     {
-        string url = $"https://source.unsplash.com/featured/?{title}";
+        string url = $"https://source.unsplash.com/featured/?{title} food";
         
         string path = "wwwroot/images/recipes";
 
@@ -84,7 +84,7 @@ public class RecipeService : IRecipeService
         return await connection.QueryFirstOrDefaultAsync<Recipe>(query, new { Id = id });
     }
 
-    public async Task Edit(Recipe recipe)
+    public async Task EditAsync(Recipe recipe)
     {
         ArgumentException.ThrowIfNullOrEmpty(recipe.Title, nameof(recipe.Title));
 
@@ -102,10 +102,10 @@ public class RecipeService : IRecipeService
             throw new Exception();
         }
 
-        await UpdateImage(recipe);
+        UpdateImage(recipe);
     }
 
-    private async Task UpdateImage(Recipe recipe)
+    private void UpdateImage(Recipe recipe)
     {
         DeleteImage(recipe.Id);
 

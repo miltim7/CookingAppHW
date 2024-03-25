@@ -50,12 +50,29 @@ else
 
             <button type="submit" hidden>SUBMIT</button>
 
-            <p>@recipe.Title</p>
-            <p>@recipe.Description</p>
-            <p>@recipe.Category</p>
+            @{
+                int maxLength = 30;
+
+                string title = recipe.Title;
+                string description = recipe.Description;
+                string category = recipe.Category;
+
+                if (recipe.Title.Length > maxLength)
+                    title = recipe.Title.Substring(0, maxLength);
+                if (recipe.Description.Length > maxLength)
+                    description = recipe.Description.Substring(0, maxLength);
+                if (recipe.Category.Length > maxLength)
+                    category = recipe.Category.Substring(0, maxLength);
+            }
+
+            <p>@title</p>
+            <p>@description</p>
+            <p>@category</p>
             <p>@recipe.Price</p>
             <div>
-                @{string truckClass = $"truck{recipe.Id}";}
+                @{
+                    string truckClass = $"truck{recipe.Id}";
+                }
                 <button class="truck-button @truckClass" onclick="truckClicked(@recipe.Id)">
                     <span class="default">Approve</span>
                     <span class="success">
@@ -71,9 +88,37 @@ else
                         <div class="box"></div>
                     </div>
                 </button>
-                @{string closeClass = $"close{recipe.Id}";}
+                @{
+                    string closeClass = $"close{recipe.Id}";
+                }
+                <a class="deny" onclick="deleteRequest(@recipe.Id)">Deny</a>
                 <button class="close-button @closeClass" style="display: none;"><i class="material-icons">close</i></button>
             </div>
         </form>
     }
 }
+
+<style>
+    .deny {
+        color: #fff;
+        background-color: #9b0a0a;
+        border-radius: 6px;
+        padding: 5px 15px;
+        height: 48px;
+        margin-left: 10px;
+    }
+
+    .deny:hover {
+        background-color: #6a0606;
+        transition: 0.3s ease;
+    }
+</style>
+
+<script>
+    async function deleteRequest(id) {
+        await fetch('/Bucket/Delete/' + id,
+            {
+                method: 'DELETE'
+            }).then(() => location.reload());
+    }
+</script>

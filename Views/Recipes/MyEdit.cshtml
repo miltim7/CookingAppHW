@@ -11,10 +11,10 @@
         <p class="form-name">Edit Recipe</p>
         <input type="number" asp-for="Id" hidden>
         <input type="text" asp-for="Title" placeholder="Title">
-        <input type="text" asp-for="Description" placeholder="Description">
+        <textarea id="description" asp-for="Description" placeholder="Description" cols="30" rows="5"></textarea>
         <input type="text" asp-for="Category" placeholder="Category">
         <input type="nubmer" asp-for="Price" placeholder="Price">
 
-        <button>Save Changes</button>
+        <button type="submit">Save Changes</button>
     </form>
 </div>

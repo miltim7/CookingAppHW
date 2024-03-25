@@ -61,7 +61,6 @@ public class BucketController : Controller
     [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
-        System.Console.WriteLine("BUCKET DELETE!");
         try
         {
             await service.DeleteAsync(id);

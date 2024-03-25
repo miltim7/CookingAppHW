@@ -59,7 +59,7 @@ public class RecipesController : Controller
 
             var recipes = await repository.GetAllAsync();
 
-            return RedirectToAction("Requests", "Bucket", InstrumentRecipe.ChangeToDto(recipes));
+            return RedirectToAction("MyRecipes", "Recipes");
         }
         catch (ArgumentException ex)
         {
@@ -140,7 +140,7 @@ public class RecipesController : Controller
 
         try
         {
-            await service.Edit(recipe);
+            await service.EditAsync(recipe);
 
             return RedirectPermanent($"/Recipes/Details?id={recipe.Id}");
         }
@@ -182,14 +182,18 @@ public class RecipesController : Controller
     {
         try
         {
-            await service.Edit(recipe);
+            await service.EditAsync(recipe);
 
-            return RedirectPermanent($"/Recipes/Details?id={recipe.Id}");
+            System.Console.WriteLine("TRY");
+
+            return RedirectToAction("Index", "Home");
         }
         catch (ArgumentException ex)
         {
             HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             ViewData["ErrorMessage"] = ex.Message;
+
+            System.Console.WriteLine("CATCH");
             return View();
         }
         catch (Exception)

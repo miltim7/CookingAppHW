@@ -5,6 +5,6 @@ public interface IRecipeService {
     Task<IEnumerable<Recipe>> GetMyAsync(string id);
     Task DeleteAsync(int id);
     Task<Recipe> GetById(int id);
-    Task Edit(Recipe recipe);
+    Task EditAsync(Recipe recipe);
     Task<IdentityUser> GetUserByRecipeIdAsync(int id);
 }
