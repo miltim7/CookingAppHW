@@ -10,7 +10,7 @@
 }
 
 <div class="profile-div">
-    <form class="profile-form" asp-action="Profile" asp-controller="Identity" method="post">
+    <form class="profile-form" asp-action="Profile" asp-controller="Identity">
         <p class="form-name">Profile</p>
         <input id="username" asp-for="@UserName" type="text" value="@Model.UserName" readonly>
         <input id="email" asp-for="@Email" type="email" value="@Model.Email" readonly>
@@ -25,7 +25,7 @@
 <script>
     function editProfile() {
         event.preventDefault();
-        var username = document.getElementById('username')
+        var username = document.getElementById('username');
 
         username.readOnly = false;
         document.getElementById('email').readOnly = false;

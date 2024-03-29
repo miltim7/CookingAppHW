@@ -7,7 +7,7 @@
     string Text = default;
 }
 
-<p class="details-title">@Model.recipe.Title</p>
+<p class="details-title">@Model.recipe.Title <span style="color: #d4d4d4;">~ @ViewData["UserName"]</span></p>
 
 <div class="slider" x-data="{start: true, end: false}" style="padding-top: 150px;">
     <div class="slider__content" x-ref="slider"
@@ -33,21 +33,9 @@
     </div>
 </div>
 
-<div class="details">
-    <div style="background-color: #e3ff9c;">
-        <label><b>Description</b></label>
-        <p>@Model.recipe.Description</p>
-    </div>
-
-    <div style="background-color: #e3ff9c;">
-        <label><b>Category</b></label>
-        <p>@Model.recipe.Category</p>
-    </div>
-
-    <div style="background-color: #e3ff9c;">
-        <label><b>Creator</b></label>
-        <p>@ViewData["UserName"]</p>
-    </div>
+<div class="details text-center">
+    <b style="font-size: 35px;">Description</b>
+    <p>@Model.recipe.Description</p>
 </div>
 
 </div>
@@ -61,7 +49,6 @@
     {
         <h2>@Model.comments.Count() comments</h2>
     }
-
 
     <form asp-action="Create" asp-controller="Comment" method="post" onsubmit="saveScrollPosition()">
         <input type="number" asp-for="@RecipeId" hidden>
@@ -139,6 +126,10 @@
         flex-direction: row;
         margin-top: -30px;
         margin-left: -10px;
+    }
+
+    .comments-div {
+        margin-top: -60px;
     }
 
     .comments-div form {
@@ -234,29 +225,18 @@
         font-weight: 400;
         color: #000000;
         margin-right: 15px;
-        display: flex;
-        flex-direction: row;
         justify-content: space-between;
         gap: 20px;
         margin-bottom: 100px;
-    }
-
-    .details div {
-        display: flex;
-        flex-direction: column;
-        background-color: #ededed;
+        background-color: #e3ff9c;
         border-radius: 20px;
         padding: 50px;
         text-align: center;
-        width: 365px;
-        max-height: 280px;
+        width: 1200px;
+        max-height: 270px;
         overflow-y: auto; 
         opacity: 0.75;
-    }
-
-    .details p {
-        margin-top: 20px;
-        margin-bottom: 50px;
+        text-align: center;
     }
 
     .details-title {
