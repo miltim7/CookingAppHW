@@ -141,4 +141,18 @@ public class IdentityController : Controller
 
         return View(user);
     }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> Profile([FromForm]UserDto dto)
+    {
+        IdentityUser user = await userManager.GetUserAsync(User);
+
+        user.Email = dto.Email;
+        user.UserName = dto.UserName;
+
+        await userManager.UpdateAsync(user);
+
+        return View(user);
+    }
 }

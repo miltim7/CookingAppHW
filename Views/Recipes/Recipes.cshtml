@@ -21,13 +21,12 @@ else
                 @{
                     string image = $"{recipe.Id}.png";
                 }
-                <div class="recipe-image" class="mt-3"><img src="~/images/recipes/@image" class="img-fluid"></div>
+                <div class="recipe-image" class="mt-3"><a href="/Recipes/Details?id=@recipe.Id"><img src="~/images/recipes/@image" class="img-fluid"></a></div>
                 <div class="title">
                     <li>@recipe.Title</li>
                     <li class="price">@recipe.Price$</li>
                 </div>
                 <div>
-                    <a href="/Recipes/Details?id=@recipe.Id" class="details"><i class="material-icons">info</i></a>
                     @if (isAdmin)
                     {
                         <a class="edit" href="/Recipes/Edit?id=@recipe.Id"><i class="material-icons">edit</i></a>
@@ -38,6 +37,13 @@ else
         }
     </ul>
 }
+
+<style>
+    .img-fluid:hover {
+        opacity: 0.8;
+        transition: 0.4s ease;
+    }
+</style>
 
 <script>
     async function deleteRecipe(id) {

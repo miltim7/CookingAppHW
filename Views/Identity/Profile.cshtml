@@ -2,15 +2,40 @@
 
 @{
     ViewData["Title"] = "Profile";
+
+    bool isAdmin = base.User.IsInRole("Admin");
+
+    string Email = default;
+    string UserName = default;
 }
 
 <div class="profile-div">
-    <form class="profile-form">
+    <form class="profile-form" asp-action="Profile" asp-controller="Identity" method="post">
         <p class="form-name">Profile</p>
-        <input type="text" value="@Model.UserName" readonly>
-        <input type="email" value="@Model.Email" readonly>
+        <input id="username" asp-for="@UserName" type="text" value="@Model.UserName" readonly>
+        <input id="email" asp-for="@Email" type="email" value="@Model.Email" readonly>
+        @if (!isAdmin)
+        {
+            <button id="edit" onclick="editProfile()">Edit</button>
+            <button id="submit" type="submit" style="display: none;">Save Changes</button>
+        }
     </form>
 </div>
+
+<script>
+    function editProfile() {
+        event.preventDefault();
+        var username = document.getElementById('username')
+
+        username.readOnly = false;
+        document.getElementById('email').readOnly = false;
+        document.getElementById('edit').style.display = "none";
+        document.getElementById('submit').style.display = "block";
+
+        username.focus();
+        username.setSelectionRange(username.value.length, username.value.length);
+    }
+</script>
 
 <style>
     .profile-div {
