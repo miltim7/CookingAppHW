@@ -26,15 +26,15 @@ builder.Services.AddDbContext<MyDbContext>(dbContextOptionsBuilder =>
     });
 });
 
+// IDENTITY
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.Password.RequireNonAlphanumeric = true;
 })
     .AddEntityFrameworkStores<MyDbContext>();
 
-
-builder.Services.AddScoped<IRecipesRepository>(p =>
-{
+// RECIPE
+builder.Services.AddScoped<IRecipesRepository>(p => {
     return new RecipesRepository(new SqlConnection(connectionString));
 });
 
@@ -42,11 +42,20 @@ builder.Services.AddScoped<IRecipeService>(p => {
     return new RecipeService(new SqlConnection(connectionString), new RecipesRepository(new SqlConnection(connectionString)));
 });
 
+// BUCKET
 builder.Services.AddScoped<IBucketRepository>(p => {
     return new BucketRepository(new SqlConnection(connectionString));
 });
 builder.Services.AddScoped<IBucketService>(p => {
     return new BucketService(new BucketRepository(new SqlConnection(connectionString)));
+});
+
+// COMMENTS
+builder.Services.AddScoped<ICommentService>(p => {
+    return new CommentService(new CommentRepository(new SqlConnection(connectionString)), new SqlConnection(connectionString));
+});
+builder.Services.AddScoped<ICommentRepository>(p => {
+    return new CommentRepository(new SqlConnection(connectionString));
 });
 
 bool CanLog = builder.Configuration.GetSection("CanLog").Get<bool>();

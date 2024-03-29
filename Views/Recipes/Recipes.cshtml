@@ -27,10 +27,7 @@ else
                     <li class="price">@recipe.Price$</li>
                 </div>
                 <div>
-                    @if (isAuthenticated)
-                    {
-                        <a href="/Recipes/Details?id=@recipe.Id" class="details"><i class="material-icons">info</i></a>
-                    }
+                    <a href="/Recipes/Details?id=@recipe.Id" class="details"><i class="material-icons">info</i></a>
                     @if (isAdmin)
                     {
                         <a class="edit" href="/Recipes/Edit?id=@recipe.Id"><i class="material-icons">edit</i></a>

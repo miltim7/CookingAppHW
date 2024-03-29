@@ -1,67 +1,239 @@
-@model Recipe
+@model RecipeComments
 
 @{
     ViewData["Title"] = "Details";
+
+    int RecipeId = @Model.recipe.Id;
+    string Text = default;
 }
 
-<p class="details-title">@Model.Title</p>
+<p class="details-title">@Model.recipe.Title</p>
 
 <div class="slider" x-data="{start: true, end: false}" style="padding-top: 150px;">
     <div class="slider__content" x-ref="slider"
         x-on:scroll.debounce="$refs.slider.scrollLeft == 0 ? start = true : start = false; Math.abs(($refs.slider.scrollWidth - $refs.slider.offsetWidth) - $refs.slider.scrollLeft) < 5 ? end = true : end = false;">
-        <div class="slider__item"><img class="slider__image" src="https://source.unsplash.com/featured/?@Model.Title">
+        <div class="slider__item"><img class="slider__image"
+                src="https://source.unsplash.com/featured/?@Model.recipe.Title">
         </div>
         <div class="slider__item"><img class="slider__image"
-                src="https://source.unsplash.com/featured/?my @Model.Title">
+                src="https://source.unsplash.com/featured/?my @Model.recipe.Title">
         </div>
         <div class="slider__item"><img class="slider__image"
-                src="https://source.unsplash.com/featured/?big @Model.Title">
+                src="https://source.unsplash.com/featured/?big @Model.recipe.Title">
         </div>
         <div class="slider__item"><img class="slider__image"
-                src="https://source.unsplash.com/featured/?delicious @Model.Title">
+                src="https://source.unsplash.com/featured/?delicious @Model.recipe.Title">
         </div>
         <div class="slider__item"><img class="slider__image"
-                src="https://source.unsplash.com/featured/?tasty @Model.Title">
+                src="https://source.unsplash.com/featured/?tasty @Model.recipe.Title">
         </div>
         <div class="slider__item"><img class="slider__image"
-                src="https://source.unsplash.com/featured/?large    @Model.Title">
+                src="https://source.unsplash.com/featured/?large @Model.recipe.Title">
         </div>
     </div>
 </div>
 
 <div class="details">
-    <div style="background-color: #75ff93;">
+    <div style="background-color: #e3ff9c;">
         <label><b>Description</b></label>
-        <p>@Model.Description</p>
+        <p>@Model.recipe.Description</p>
     </div>
 
-    <div>
+    <div style="background-color: #e3ff9c;">
         <label><b>Category</b></label>
-        <p>@Model.Category</p>
+        <p>@Model.recipe.Category</p>
     </div>
 
-    <div>
+    <div style="background-color: #e3ff9c;">
         <label><b>Creator</b></label>
         <p>@ViewData["UserName"]</p>
     </div>
-
-    <div>
-        <label><b>Recipes id</b></label>
-        <p>@Model.Id</p>
-    </div>
 </div>
 
-<div style="top: 950px; position: absolute; height: 10px">ㅤ</div>
+</div>
+
+<div class="comments-div">
+    @if (Model.comments.Count() == 1)
+    {
+        <h2>1 comment</h2>
+    }
+    else
+    {
+        <h2>@Model.comments.Count() comments</h2>
+    }
+
+
+    <form asp-action="Create" asp-controller="Comment" method="post" onsubmit="saveScrollPosition()">
+        <input type="number" asp-for="@RecipeId" hidden>
+        <input oninput="TextChange()" id="text" class="text" type="text" asp-for="@Text"
+            placeholder="Add your comment . . .">
+
+        <button style="background-color: #6f6f6f;" id="send-comment-submit" class="submit" type="submit"
+            disabled>Send</button>
+    </form>
+
+    @foreach (var comment in Model.comments)
+    {
+        <div class="comment-card">
+            @{
+                char logoSymbol = comment.AuthorUsername[0];
+
+                string[] colors = new string[] {
+                    "#0047fa", "#00a7fa", "#007e58", "#007e08", "#987500", "#ac4200", "#f50000", "#8100b4", "#b8007e", "#960023"
+                };
+
+                Random random = new Random();
+
+                string color = colors[random.Next(0, colors.Count())];
+            }
+            <div class="img" style="background-color: @color;">
+                <p>@logoSymbol</p>
+            </div>
+
+            <div>
+                @{
+                    string commentAuthor = $"@{comment.AuthorUsername}";
+                }
+                <p class="comment-author">@commentAuthor <span class="comment-date">@comment.PublishDate</span></p>
+                <p>@comment.Text</p>
+            </div>
+        </div>
+    }
+    <div>ㅤ</div>
+</div>
+
+<script>
+    function saveScrollPosition() {
+        var scrollPosition = {
+            x: window.scrollX,
+            y: window.scrollY
+        };
+        sessionStorage.setItem('scrollPosition', JSON.stringify(scrollPosition));
+    }
+
+    function restoreScrollPosition() {
+        var scrollPosition = JSON.parse(sessionStorage.getItem('scrollPosition'));
+        if (scrollPosition) {
+            window.scrollTo(scrollPosition.x, scrollPosition.y);
+            sessionStorage.removeItem('scrollPosition');
+        }
+    }
+
+    window.onload = restoreScrollPosition;
+
+    function TextChange() {
+        var text = document.getElementById('text').value;
+        if (text.trim() === '') {
+            document.getElementById('send-comment-submit').disabled = true;
+            document.getElementById('send-comment-submit').style.backgroundColor = '#6f6f6f';
+        } else {
+            document.getElementById('send-comment-submit').disabled = false;
+            document.getElementById('send-comment-submit').style.backgroundColor = '#000fe4';
+        }
+    }
+</script>
 
 <style>
+    .comment-rate {
+        display: flex;
+        flex-direction: row;
+        margin-top: -30px;
+        margin-left: -10px;
+    }
+
+    .comments-div form {
+        margin-top: 30px;
+    }
+
+    .comments-div .submit {
+        margin-top: 10px;
+        padding: 10px 30px;
+        border-radius: 30px;
+        width: 200px;
+        color: #fff;
+    }
+
+    .comments-div .text {
+        background-color: #efefef;
+        width: 250%;
+        height: 50px;
+        color: #000000;
+        padding: 40px 20px 40px 20px;
+        border-radius: 10px;
+    }
+
+    .comments-div {
+        position: absolute;
+        top: 1050px;
+        left: 50%;
+        margin-left: -560px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .comment-card .img {
+        border-radius: 100px;
+        height: 40px;
+        width: 40px;
+        color: #fff;
+    }
+
+    .comment-card .img p {
+        margin-left: 16px;
+        margin-top: 8px;
+    }
+
+    .comment-card {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .comment-date {
+        color: #5c5c5c;
+        font-size: 15px;
+        margin-left: 10px;
+    }
+
+    .thumb {
+        background-color: transparent;
+        padding: 6px;
+        border-radius: 50%;
+        color: #7a7a7a;
+    }
+
+    .thumb:hover {
+        background-color: #eeeeee;
+    }
+
+    .thumb-down {
+        margin-left: 40px;
+        margin-top: 3px;
+        position: absolute;
+    }
+
+    .thumb-down-rate-count {
+        position: absolute;
+        font-size: 15px;
+        margin-top: 3px;
+        margin-left: 5px;
+    }
+
+    .thumb-up-rate-count {
+        position: absolute;
+        font-size: 15px;
+        margin-top: 6px;
+        margin-left: 5px;
+    }
+
     .details {
         position: absolute;
         top: 700px;
         font-size: 20px;
         font-weight: 400;
         color: #000000;
-        margin-right: 35px;
-
+        margin-right: 15px;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -76,8 +248,10 @@
         border-radius: 20px;
         padding: 50px;
         text-align: center;
-        width: 265px;
-        opacity: 0.8;
+        width: 365px;
+        max-height: 280px;
+        overflow-y: auto; 
+        opacity: 0.75;
     }
 
     .details p {

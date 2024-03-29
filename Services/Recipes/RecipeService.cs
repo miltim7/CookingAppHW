@@ -28,9 +28,9 @@ public class RecipeService : IRecipeService
         int id = await repository.CreateAsync(recipeDto);
 
         if (id < 1)
-            throw new Exception();
-
-        DownloadImage(id, recipeDto.Title);
+            throw new Exception();          
+                                            
+        DownloadImage(id, recipeDto.Title);  
     }
 
     private void DownloadImage(int id, string title)

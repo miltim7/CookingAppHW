@@ -20,3 +20,22 @@ create table Logs
     [RequestBody] nvarchar(max),
     [ResponseBody] nvarchar(max)
 )
+
+create table Bucket 
+(
+	[Id] int primary key identity,
+    [Title] nvarchar(50) not null,
+    [Description] nvarchar(max) not null,
+    [Category] nvarchar(50) not null,
+    [Price] int not null,
+    [UserId] nvarchar(450) foreign key references AspNetUsers([Id])
+)
+
+create table Comments
+(
+    [Id] int primary key identity,
+    [RecipeId] int,
+	[AuthorUsername] nvarchar(256),
+    [Text] nvarchar(max),
+    [PublishDate] datetime2,
+)

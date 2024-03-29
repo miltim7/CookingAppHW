@@ -12,13 +12,15 @@ public class RecipesController : Controller
     private IRecipesRepository repository;
     private readonly IRecipeService service;
     private readonly UserManager<IdentityUser> userManager;
+    private readonly ICommentService commentsService;
 
     public RecipesController(IRecipesRepository repository, IRecipeService service,
-    UserManager<IdentityUser> userManager)
+    UserManager<IdentityUser> userManager, ICommentService commentsService)
     {
         this.repository = repository;
         this.service = service;
         this.userManager = userManager;
+        this.commentsService = commentsService;
     }
 
     [HttpGet("[controller]/GetAll")]
@@ -74,16 +76,21 @@ public class RecipesController : Controller
     }
 
     [HttpGet("[controller]/Details")]
-    [Authorize]
     public async Task<IActionResult> Details(int id)
     {
         try
         {
+            RecipeComments recipeComments = new RecipeComments();
+
             var recipe = await repository.GetByIdAsync(id);
+            var comments = await commentsService.GetCommentsByRecipeIdAsync(id);
+
+            recipeComments.recipe = recipe;
+            recipeComments.comments = comments;
 
             ViewData["UserName"] = (await service.GetUserByRecipeIdAsync(id)).UserName;
 
-            return View(recipe);
+            return View(recipeComments);
         }
         catch (ArgumentException ex)
         {
@@ -132,12 +139,9 @@ public class RecipesController : Controller
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit([FromForm] Recipe recipe)
     {
-        if (!this.User.IsInRole("Admin"))
-            return StatusCode(403, "Have not access!");
-
         try
         {
             await service.EditAsync(recipe);
