@@ -11,6 +11,7 @@ async function truckClicked(id) {
         {
             method: 'DELETE'
         });
+        
     button.classList.add("clicked");
 
     setTimeout(function () {

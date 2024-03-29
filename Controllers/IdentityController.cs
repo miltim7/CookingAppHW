@@ -21,8 +21,10 @@ public class IdentityController : Controller
     }
 
     [HttpGet]
-    public IActionResult Login()
+    public IActionResult Login(string? ReturnUrl)
     {
+        ViewData["ReturnUrl"] = ReturnUrl;
+
         return View();
     }
 
@@ -47,7 +49,7 @@ public class IdentityController : Controller
                 return View();
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectPermanent(dto.ReturnUrl ?? "/");
         }
         catch (ArgumentNullException ex)
         {
