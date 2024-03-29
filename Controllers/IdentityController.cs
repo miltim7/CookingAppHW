@@ -144,7 +144,7 @@ public class IdentityController : Controller
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Profile([FromForm]UserDto dto)
+    public async Task<IActionResult> Profile([FromForm] UserDto dto)
     {
         IdentityUser user = await userManager.GetUserAsync(User);
 
@@ -152,6 +152,15 @@ public class IdentityController : Controller
         user.UserName = dto.UserName;
 
         await userManager.UpdateAsync(user);
+
+        return View(user);
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> Profiles(string id)
+    {
+        var user = await userManager.FindByNameAsync(id);
 
         return View(user);
     }

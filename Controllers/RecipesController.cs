@@ -89,6 +89,9 @@ public class RecipesController : Controller
             recipeComments.comments = comments;
 
             ViewData["UserName"] = (await service.GetUserByRecipeIdAsync(id)).UserName;
+            ViewData["MyUserName"] = (await userManager.GetUserAsync(User)).UserName;
+
+            ViewBag.UserId = (await userManager.GetUserAsync(User)).Id;
 
             return View(recipeComments);
         }

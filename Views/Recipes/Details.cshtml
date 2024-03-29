@@ -66,8 +66,8 @@
                 char logoSymbol = comment.AuthorUsername[0];
 
                 string[] colors = new string[] {
-                    "#0047fa", "#00a7fa", "#007e58", "#007e08", "#987500", "#ac4200", "#f50000", "#8100b4", "#b8007e", "#960023"
-                };
+        "#0047fa", "#00a7fa", "#007e58", "#007e08", "#987500", "#ac4200", "#f50000", "#8100b4", "#b8007e", "#960023"
+        };
 
                 Random random = new Random();
 
@@ -80,8 +80,21 @@
             <div>
                 @{
                     string commentAuthor = $"@{comment.AuthorUsername}";
+
+                    Console.WriteLine($"{ViewData["MyUserName"]}|{comment.AuthorUsername}");
                 }
-                <p class="comment-author">@commentAuthor <span class="comment-date">@comment.PublishDate</span></p>
+
+                @if (@ViewData["MyUserName"].ToString() == comment.AuthorUsername.ToString())
+                {
+                    <p class="comment-author"><a href="/Identity/Profile">@commentAuthor</a> <span
+                            class="comment-date">@comment.PublishDate</span></p>
+                }
+                else
+                {
+                    <p class="comment-author"><a href="/Identity/Profiles?id=@comment.AuthorUsername">@commentAuthor</a> <span
+                            class="comment-date">@comment.PublishDate</span></p>
+                }
+
                 <p>@comment.Text</p>
             </div>
         </div>
@@ -121,6 +134,15 @@
 </script>
 
 <style>
+    .comment-author a {
+        color: #000;
+        text-decoration: none;
+    }
+
+    .comment-author a:hover {
+        text-decoration: underline;
+    }
+
     .comment-rate {
         display: flex;
         flex-direction: row;
@@ -234,7 +256,7 @@
         text-align: center;
         width: 1200px;
         max-height: 270px;
-        overflow-y: auto; 
+        overflow-y: auto;
         opacity: 0.75;
         text-align: center;
     }
