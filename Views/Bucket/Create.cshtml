@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Create";
+
+    var Title = string.Empty;
+    var Description = string.Empty;
+    var Category = string.Empty;
+    int Price = 0;
+    string UserId = ViewBag.Id;
+}
+
+<div class="create-div">
+    <p class="error">@ViewData["ErrorMessage"]</p>
+
+    <form class="create-form" asp-controller="Bucket" asp-action="Create" method="post">
+        <p>Create Recipe</p>
+
+        <input id="title" asp-for="@Title" type="text" placeholder="Title" value=""/>
+        <textarea id="description" asp-for="@Description" placeholder="Description" cols="30" rows="5"></textarea>
+        <input id="category" asp-for="@Category" type="text" placeholder="Category" value=""/>
+        <input id="price" asp-for="@Price" type="number" placeholder="Price" value="">
+        <input id="userId" type="text" asp-for="@UserId" hidden>
+
+        <button id="submit" type="submit">SEND TO VARIFICATION</button>
+    </form>
+</div>
+
+<script>
+    function createBucket() {
+        document.getElementById("description").value = '';
+    }
+
+    window.onload = createBucket;
+</script>

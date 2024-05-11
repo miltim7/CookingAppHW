@@ -5,19 +5,21 @@
     var Description = string.Empty;
     var Category = string.Empty;
     int Price = 0;
-    int UserId = int.Parse(ViewData["UserId"].ToString());
+    string UserId = ViewBag.Id;
 }
 
-<button class="go-back">&#8249;</button>
+<div class="create-div">
+    <p class="error">@ViewData["ErrorMessage"]</p>
 
-<p class="error">@ViewData["ErrorMessage"]</p>
+    <form class="create-form" asp-controller="Recipes" asp-action="Create" method="post">
+        <p>Create Recipe</p>
 
-<form asp-asp-controller="Recipes" asp-action="Create" method="post">
-    <input id="title" asp-for="@Title" type="text" placeholder="Title" />
-    <textarea id="description" asp-for="@Description" placeholder="Description" cols="30" rows="10"></textarea>
-    <input id="category" asp-for="@Category" type="text" placeholder="Category" />
-    <input id="price" asp-for="@Price" type="number"placeholder="Price">
-    <input type="text" asp-for="@UserId" hidden>
+        <input id="title" asp-for="@Title" type="text" placeholder="Title" />
+        <textarea id="description" asp-for="@Description" placeholder="Description" cols="30" rows="5"></textarea>
+        <input id="category" asp-for="@Category" type="text" placeholder="Category" />
+        <input id="price" asp-for="@Price" type="number" placeholder="Price">
+        <input id="userId" type="text" asp-for="@UserId" hidden>
 
-    <input id="submit" type="submit" value="Create"/>
-</form>
+        <button id="submit" type="submit">Create</button>
+    </form>
+</div>

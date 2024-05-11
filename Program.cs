@@ -1,39 +1,62 @@
 using System.Data.SqlClient;
-using System.Security.Claims;
+using System.Reflection;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+string? connectionString = builder.Configuration.GetConnectionString("CookingDB");
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Identity/Login";
+        options.AccessDeniedPath = "/Identity/Login";
         options.ReturnUrlParameter = "returnUrl";
     });
 
-string? connectionString = builder.Configuration.GetConnectionString("CookingDB");
+builder.Services.AddAuthorization();
 
-ArgumentNullException.ThrowIfNull(connectionString);
-
-builder.Services.AddScoped<IRecipesRepository>(p =>
+builder.Services.AddDbContext<MyDbContext>(dbContextOptionsBuilder =>
 {
-    return new RecipesRepository(new SqlConnection(connectionString));
+    dbContextOptionsBuilder.UseSqlServer(connectionString, useSqlOptions => {
+        useSqlOptions.MigrationsAssembly(Assembly.GetExecutingAssembly().GetName().Name);
+    });
 });
 
-builder.Services.AddScoped<IUserRepository>(p =>
+// IDENTITY
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
-    return new UserRepository(new SqlConnection(connectionString));
+    options.Password.RequireNonAlphanumeric = true;
+})
+    .AddEntityFrameworkStores<MyDbContext>();
+
+// RECIPE
+builder.Services.AddScoped<IRecipesRepository>(p => {
+    return new RecipesRepository(new SqlConnection(connectionString));
 });
 
 builder.Services.AddScoped<IRecipeService>(p => {
     return new RecipeService(new SqlConnection(connectionString), new RecipesRepository(new SqlConnection(connectionString)));
 });
 
-builder.Services.AddScoped<IUserService>(p =>
-{
-    return new UserService(new SqlConnection(connectionString), new UserRepository(new SqlConnection(connectionString)));
+// BUCKET
+builder.Services.AddScoped<IBucketRepository>(p => {
+    return new BucketRepository(new SqlConnection(connectionString));
+});
+builder.Services.AddScoped<IBucketService>(p => {
+    return new BucketService(new BucketRepository(new SqlConnection(connectionString)));
+});
+
+// COMMENTS
+builder.Services.AddScoped<ICommentService>(p => {
+    return new CommentService(new CommentRepository(new SqlConnection(connectionString)), new SqlConnection(connectionString));
+});
+builder.Services.AddScoped<ICommentRepository>(p => {
+    return new CommentRepository(new SqlConnection(connectionString));
 });
 
 bool CanLog = builder.Configuration.GetSection("CanLog").Get<bool>();

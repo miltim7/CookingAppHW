@@ -1,74 +1,136 @@
-﻿const hamburger = document.querySelector(".hamburger");
-const navLinks = document.querySelector(".nav-links");
-const links = document.querySelectorAll(".nav-links li");
-const goBack = document.querySelector('.go-back');
+﻿
+async function truckClicked(id) {
+    var button = document.querySelector(`.truck${id}`);
 
-goBack.addEventListener('click', () => {
-    window.history.back();
-})
-
-hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle("open");
-    links.forEach(link => {
-        link.classList.toggle("fade");
-    });
-
-    hamburger.classList.toggle("toggle");
-});
-
-function toggleChangePasswordForm() {
-    var changePasswordForm = document.querySelector("#changePasswordForm");
-    changePasswordForm.style.display = "flex";
-
-    var profileForm = document.querySelector("#profileForm");
-    profileForm.style.display = "none";
-
-    var changePasswordButton = document.querySelector('#changePasswordButton');
-    changePasswordButton.style.display = "none";
-
-    var goBackButton = document.querySelector('.go-back');
-    goBackButton.style.display = "none";
-
-    var cancelChangePasswordButton = document.querySelector('.cancel-change-password');
-    cancelChangePasswordButton.style.display = "inline-block";
-
-    cancelChangePasswordButton.addEventListener('click', () => {
-        profileForm.style.display = "flex";
-        changePasswordForm.style.display = 'none';
-
-        goBackButton.style.display = "inline-block";
-        cancelChangePasswordButton.style.display = "none";
-
-        changePasswordButton.style.display = "flex";
+    var buttons = document.querySelectorAll('.truck-button');
+    buttons.forEach(button => {
+        button.disabled = true;
     })
+
+    await fetch('/Bucket/Delete/' + id,
+        {
+            method: 'DELETE'
+        });
+        
+    button.classList.add("clicked");
+
+    setTimeout(function () {
+        button.classList.add("normal");
+    }, 3800);
+
+    setTimeout(function () {
+        document.querySelector(`.close${id}`).click();
+
+        var item = document.querySelector(`.form${id}`);
+
+        item.style.transform = "translateX(-100%)";
+
+        setTimeout(function () {
+            item.classList.add("hidden");
+
+            buttons.forEach(button => {
+                button.disabled = false;
+            })
+        }, 600);
+    }, 5000);
 }
 
-function changePassword(password) {
-    var currentPassword = document.querySelector("#currentPassword").value;
-    var newPassword = document.querySelector("#newPassword").value;
-    var confirmNewPassword = document.querySelector("#confirmNewPassword").value;
+document.querySelectorAll('.truck-button').forEach(button => {
+    button.addEventListener('click', e => {
+        e.preventDefault();
 
-    if (currentPassword.trim() === "" || currentPassword === null ||
-        newPassword.trim() === "" || newPassword === null ||
-        confirmNewPassword.trim() === "" || confirmNewPassword === null) {
-        alert("Fields can not be empty!");
-        return false;
-    }
+        let box = button.querySelector('.box'),
+            truck = button.querySelector('.truck');
 
-    if (currentPassword !== password) {
-        alert("Old Password is incorrect!");
-        return false;
-    }
+        if (!button.classList.contains('done')) {
 
-    if (newPassword !== confirmNewPassword) {
-        alert("New passwords don't match");
-        return false;
-    }
+            if (!button.classList.contains('animation')) {
 
-    if (newPassword === currentPassword) {
-        alert("New password is the same as old");
-        return false;
-    }
+                button.classList.add('animation');
 
-    return true;
-}
+                gsap.to(button, {
+                    '--box-s': 1,
+                    '--box-o': 1,
+                    duration: .3,
+                    delay: .5
+                });
+
+                gsap.to(box, {
+                    x: 0,
+                    duration: .4,
+                    delay: .7
+                });
+
+                gsap.to(button, {
+                    '--hx': -5,
+                    '--bx': 50,
+                    duration: .18,
+                    delay: .92
+                });
+
+                gsap.to(box, {
+                    y: 0,
+                    duration: .1,
+                    delay: 1.15
+                });
+
+                gsap.set(button, {
+                    '--truck-y': 0,
+                    '--truck-y-n': -26
+                });
+
+                gsap.to(button, {
+                    '--truck-y': 1,
+                    '--truck-y-n': -25,
+                    duration: .2,
+                    delay: 1.25,
+                    onComplete() {
+                        gsap.timeline({
+                            onComplete() {
+                                button.classList.add('done');
+                            }
+                        }).to(truck, {
+                            x: 0,
+                            duration: .4
+                        }).to(truck, {
+                            x: 40,
+                            duration: 1
+                        }).to(truck, {
+                            x: 20,
+                            duration: .6
+                        }).to(truck, {
+                            x: 96,
+                            duration: .4
+                        });
+                        gsap.to(button, {
+                            '--progress': 1,
+                            duration: 2.4,
+                            ease: "power2.in"
+                        });
+                    }
+                });
+
+            }
+
+        } else {
+            button.classList.remove('animation', 'done');
+            gsap.set(truck, {
+                x: 4
+            });
+            gsap.set(button, {
+                '--progress': 0,
+                '--hx': 0,
+                '--bx': 0,
+                '--box-s': .5,
+                '--box-o': 0,
+                '--truck-y': 0,
+                '--truck-y-n': -26
+            });
+            gsap.set(box, {
+                x: -24,
+                y: -6
+            });
+        }
+
+    });
+});

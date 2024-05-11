@@ -1,0 +1,127 @@
+@model IEnumerable<Bucket>
+
+@{
+    ViewData["Title"] = "Requests";
+
+    int counter = 0;
+
+    var Title = string.Empty;
+    var Description = string.Empty;
+    var Category = string.Empty;
+    int Price = 0;
+    string UserId = ViewBag.Id;
+}
+
+<div class="requests-grid-container">
+    <div>Title</div>
+    <div>Description</div>
+    <div>Category</div>
+    <div>Price</div>
+    <div>Approvals</div>
+</div>
+
+@if (!Model.Any())
+{
+    <h1 style="margin-top: 300px; font-weight: 100;">There is no requests to validation!</h1>
+}
+else
+{
+
+    @foreach (var recipe in Model)
+    {
+        {
+            counter++;
+
+            Title = recipe.Title;
+            Description = recipe.Description;
+            Category = recipe.Category;
+            Price = recipe.Price;
+            UserId = recipe.UserId;
+        }
+        string formClass = $"form{@recipe.Id}";
+        <form asp-action="Create" asp-controller="Recipes" method="post" style="margin-top: calc(@counter *
+100px)" class="requests-items @formClass">
+
+            <input id="title" asp-for="@Title" type="text" placeholder="Title" hidden />
+            <textarea id="description" asp-for="@Description" placeholder="Description" cols="30" rows="5" hidden></textarea>
+            <input id="category" asp-for="@Category" type="text" placeholder="Category" hidden />
+            <input id="price" asp-for="@Price" type="number" placeholder="Price" hidden>
+            <input id="userId" type="text" asp-for="@UserId" hidden>
+
+            <button type="submit" hidden>SUBMIT</button>
+
+            @{
+                int maxLength = 30;
+
+                string title = recipe.Title;
+                string description = recipe.Description;
+                string category = recipe.Category;
+
+                if (recipe.Title.Length > maxLength)
+                    title = recipe.Title.Substring(0, maxLength);
+                if (recipe.Description.Length > maxLength)
+                    description = recipe.Description.Substring(0, maxLength);
+                if (recipe.Category.Length > maxLength)
+                    category = recipe.Category.Substring(0, maxLength);
+            }
+
+            <p>@title</p>
+            <p>@description</p>
+            <p>@category</p>
+            <p>@recipe.Price</p>
+            <div>
+                @{
+                    string truckClass = $"truck{recipe.Id}";
+                }
+                <button class="truck-button @truckClass" onclick="truckClicked(@recipe.Id)">
+                    <span class="default">Approve</span>
+                    <span class="success">
+                        Approved!
+                        <svg viewbox="0 0 12 10">
+                            <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                        </svg>
+                    </span>
+                    <div class="truck">
+                        <div class="wheel"></div>
+                        <div class="back"></div>
+                        <div class="front"></div>
+                        <div class="box"></div>
+                    </div>
+                </button>
+                @{
+                    string closeClass = $"close{recipe.Id}";
+                }
+                <a class="deny" onclick="deleteRequest(@recipe.Id)">Deny</a>
+                <button class="close-button @closeClass" style="display: none;"><i class="material-icons">close</i></button>
+            </div>
+        </form>
+    }
+}
+
+<style>
+    .deny {
+        color: #fff;
+        background-color: #9b0a0a;
+        border-radius: 6px;
+        padding: 12px 15px 5px 15px;
+        height: 48px;
+        margin-left: 200px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .deny:hover {
+        color: #fff;
+        background-color: #6a0606;
+        transition: 0.3s ease;
+    }
+</style>
+
+<script>
+    async function deleteRequest(id) {
+        await fetch('/Bucket/Delete/' + id,
+            {
+                method: 'DELETE'
+            }).then(() => location.reload());
+    }
+</script>

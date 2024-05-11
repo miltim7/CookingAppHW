@@ -1,17 +1,16 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using CookingAppHW.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CookingAppHW.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IUserService service;
+    private readonly UserManager<IdentityUser> userManager;
 
-    public HomeController(IUserService service)
+    public HomeController(UserManager<IdentityUser> userManager)
     {
-        this.service = service;
+        this.userManager = userManager;
     }
 
     public IActionResult Main()
@@ -22,9 +21,8 @@ public class HomeController : Controller
     [Authorize]
     public async Task<IActionResult> Index() 
     {
-        int id = int.Parse(HttpContext.Request.Cookies["UserId"]);
-        User user = await service.GetUserById(id);
-        ViewData["Username"] = user.Name;
+        var user = await userManager.GetUserAsync(User);
+        ViewData["Username"] = user?.UserName;
         return View();
     }
 }

@@ -2,13 +2,39 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4"><span>@ViewData["Username"]</span>!</h1>
+<div class="main-div" style="margin-top: 10rem; text-align: center;">
+    <h1 style="padding-bottom: 40px; color: green"><span>@ViewData["UserName"]</span>!</h1>
+    <div class="index-images">
+        <img src="https://hips.hearstapps.com/hmg-prod/images/chicken-caesar-salad7-1654809005.jpg?crop=0.588xw:0.880xh;0.0497xw,0.120xh&resize=1200:*">
+        <img src="https://food.fnr.sndimg.com/content/dam/images/food/fullset/2014/5/14/2/FNM_060114-Strawberry-Rhubarb-Pie-Recipe_s4x3.jpg.rend.hgtvcom.1280.1280.suffix/1400257598943.jpeg">
+        <img src="https://media-cdn.tripadvisor.com/media/photo-s/1d/69/67/ec/crl-home-dark-bun-hamburger.jpg">
+        <img src="https://sugarspunrun.com/wp-content/uploads/2022/04/Best-Chocolate-Cupcakes-1-of-1.jpg">
+    </div>
+    <p class="interpretation">Explore the world of culinary delights with Cooking! This is your space to discover,
+        share,
+        and indulge in a variety of mouthwatering recipes. Whether you're a seasoned chef or a kitchen novice, there's
+        something here for everyone. </br></br> Feel free to browse through the diverse collection of recipes
+        contributed by
+        our vibrant community, or contribute your own signature dish to inspire others. Let the culinary journey begin!
+        <br><br> --> <span style="font-size: 20px;">Watch your <a class="profile"
+                href="/Identity/Profile">Profile</a></span>
+    </p>
 </div>
 
-<p class="interpretation">Explore the world of culinary delights with Cooking! This is your space to discover, share,
-    and indulge in a variety of mouthwatering recipes. Whether you're a seasoned chef or a kitchen novice, there's
-    something here for everyone. </br></br> Feel free to browse through the diverse collection of recipes contributed by
-    our vibrant community, or contribute your own signature dish to inspire others. Let the culinary journey begin!
-    <br><br> --> Watch your <a class="profile" href="/Identity/Profile">Profile</a>
-</p>
+<style>
+    .index-images {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .index-images img {
+        max-width: 300px;
+        max-height: 300px;
+        width: auto;
+        heiht: auto;
+        margin-bottom: 30px;
+        border-radius: 10px;
+    }
+</style>

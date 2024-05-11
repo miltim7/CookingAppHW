@@ -1,38 +1,97 @@
-@model User
+@model IdentityUser
 
 @{
     ViewData["Title"] = "Profile";
 
-    string Password = "";
+    bool isAdmin = base.User.IsInRole("Admin");
+
+    string Email = default;
+    string UserName = default;
 }
 
-<button class="go-back">&#8249;</button>
+<div class="profile-div">
+    <form class="profile-form" asp-action="Profile" asp-controller="Identity">
+        <p class="form-name">Profile</p>
+        <input id="username" asp-for="@UserName" type="text" value="@Model.UserName" readonly>
+        <input id="email" asp-for="@Email" type="email" value="@Model.Email" readonly>
+        @if (!isAdmin)
+        {
+            <button id="edit" onclick="editProfile()">Edit</button>
+            <button id="submit" type="submit" style="display: none;">Save Changes</button>
+        }
+    </form>
+</div>
 
-<button class="cancel-change-password" style="display: none;">&#8249;</button>
+<script>
+    function editProfile() {
+        event.preventDefault();
+        var username = document.getElementById('username');
 
-<p class="error">@ViewData["ErrorMessage"]</p>
+        username.readOnly = false;
+        document.getElementById('email').readOnly = false;
+        document.getElementById('edit').style.display = "none";
+        document.getElementById('submit').style.display = "block";
 
-<form id="profileForm" asp-controller="Identity" asp-action="ChangeProfile">
-    <label for="name">Name</label>
-    <input id="name" asp-for="@Model.Name" type="text" placeholder="Name">
+        username.focus();
+        username.setSelectionRange(username.value.length, username.value.length);
+    }
+</script>
 
-    <label for="surname">Surname</label>
-    <input id="surname" asp-for="@Model.Surname" type="text" placeholder="Surname">
+<style>
+    .profile-div {
+        display: flex;
+        flex-direction: column;
+        margin-top: 250px;
+        font-size: 30px;
+    }
 
-    <label for="login">Login</label>
-    <input id="login" asp-for="@Model.Login" type="text" placeholder="Login">
+    .profile-form p {
+        font-weight: bold;
+        color: #d6bf29;
+        font-size: 18px;
+    }
 
-    <button id="submit" type="submit">Save Changes</button>
-</form>
+    .profile-form {
+        position: relative;
+        background: #ffffff;
+        max-width: 360px;
+        padding: 45px;
+        text-align: center;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        border-radius: 15px;
+    }
 
-<button id="changePasswordButton" onclick="toggleChangePasswordForm()">Change Password</button>
+    .profile-form input,
+    .profile-form textarea {
+        outline: 0;
+        background: #f2f2f2;
+        width: 100%;
+        border: 0;
+        margin: 0 0 15px;
+        padding: 15px;
+        box-sizing: border-box;
+        font-size: 14px;
+        border-radius: 15px;
+    }
 
-<form id="changePasswordForm" style="display: none;" asp-controller="Identity" asp-action="ChangePassword" method="post">
-    <input placeholder="Old Password" type="password" id="currentPassword" name="currentPassword">
+    .profile-form button {
+        text-transform: uppercase;
+        outline: 0;
+        background: #3324be;
+        width: 100%;
+        border: 0;
+        padding: 15px;
+        color: #FFFFFF;
+        font-size: 14px;
+        border-radius: 15px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        cursor: pointer;
+    }
 
-    <input placeholder="New Password" type="password" id="newPassword" name="newPassword">
-
-    <input asp-for="@Password" placeholder="Confirm New Password" type="password" id="confirmNewPassword" name="confirmNewPassword">
-
-    <button onclick="return changePassword('@Model.Password')" type="submit" id="submit">Change Password</button>
-</form>
+    .profile-form button:hover,
+    .profile-form button:active,
+    .profile-form button:focus {
+        background: #2957d6;
+    }
+</style>
