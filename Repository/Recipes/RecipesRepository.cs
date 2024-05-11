@@ -12,19 +12,19 @@ public class RecipesRepository : IRecipesRepository
 
     public async Task<IEnumerable<Recipe>> GetAllAsync()
     {
-        return await connection.QueryAsync<Recipe>("select * from Recipe");
+        return await connection.QueryAsync<Recipe>("select * from Recipes");
     }
 
     public async Task<int> CreateAsync(RecipeDto recipeDto)
     {
-        string query = @"insert into Recipe (Title, [Description], Category, Price)
-                         values(@Title, @Description, @Category, @Price)";
+        string query = @"insert into Recipes ([Title], [Description], [Category], [Price], [UserId])
+                         values(@Title, @Description, @Category, @Price, @UserId)";
 
         return await connection.ExecuteAsync(query, recipeDto);
     }
 
     public async Task<Recipe> GetByIdAsync(int id) {
-        string query = "select * from Recipe where Id = @Id";
+        string query = "select * from Recipes where Id = @Id";
 
         return await connection.QueryFirstAsync<Recipe>(query, new { Id = id });
     }
